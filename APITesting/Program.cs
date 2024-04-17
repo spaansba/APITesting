@@ -1,5 +1,4 @@
 using APITesting;
-using APITesting.Properties.Endpoints;
 using Microsoft.Extensions.Options;
 using Serilog;
 
@@ -16,6 +15,7 @@ builder.Logging.AddSerilog(logger);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<TestAPI>();
+builder.Services.AddProblemDetails(); // create an exception handler that will generate a ProblemDetails if an exception occurs https://www.rfc-editor.org/rfc/rfc7807.html
 
 builder.Services.Configure<ApplicationOptions>(
     builder.Configuration.GetSection(
@@ -28,6 +28,11 @@ builder.Services.Configure<ApplicationOptions>(
 
 var app = builder.Build();
 
+// Exception handlers
+// https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/handle-errors?view=aspnetcore-8.0
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -38,6 +43,8 @@ if (app.Environment.IsDevelopment())
 app.AddTestEndpoints();
 app.UseHttpsRedirection();
 
+
+// TODO: Add to its own file
 app.MapGet("options", (
     IOptions<ApplicationOptions> options,
     IOptionsSnapshot<ApplicationOptions> optionsSnapshot,

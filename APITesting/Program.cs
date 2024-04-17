@@ -18,7 +18,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<TestAPI>();
 
 builder.Services.Configure<ApplicationOptions>(
-    builder.Configuration.GetSection(nameof(ApplicationOptions)));
+    builder.Configuration.GetSection(
+        nameof(ApplicationOptions)
+    )
+);
+
+builder.Services.Configure<ApplicationOptions>(
+    builder.Configuration.GetSection(ApplicationOptions.Key));
 
 var app = builder.Build();
 
@@ -55,5 +61,6 @@ app.Run();
 
 public class ApplicationOptions
 {
+    public const string Key = "Application";
     public string ExampleValue { get; init; } = string.Empty;
 }

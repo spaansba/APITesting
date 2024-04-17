@@ -41,3 +41,4 @@ C:\Users\barts\RiderProjects\APITesting\APITesting\bin\Debug\net8.0\Serilog.Sett
 C:\Users\barts\RiderProjects\APITesting\APITesting\bin\Debug\net8.0\Serilog.Sinks.Console.dll
 C:\Users\barts\RiderProjects\APITesting\APITesting\bin\Debug\net8.0\Serilog.Sinks.Debug.dll
 C:\Users\barts\RiderProjects\APITesting\APITesting\bin\Debug\net8.0\Serilog.Sinks.File.dll
+C:\Users\barts\RiderProjects\APITesting\APITesting\obj\Debug\net8.0\APITesting.sourcelink.json

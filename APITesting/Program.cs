@@ -14,17 +14,10 @@ builder.Logging.AddSerilog(logger);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<TestAPI>();
+builder.Services.AddSingleton<UserService>();
 builder.Services.AddProblemDetails(); // create an exception handler that will generate a ProblemDetails if an exception occurs https://www.rfc-editor.org/rfc/rfc7807.html
 
-builder.Services.Configure<ApplicationOptions>(
-    builder.Configuration.GetSection(
-        nameof(ApplicationOptions)
-    )
-);
-
-builder.Services.Configure<ApplicationOptions>(
-    builder.Configuration.GetSection(ApplicationOptions.Key));
+builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Key));
 
 var app = builder.Build();
 
@@ -40,34 +33,12 @@ if (app.Environment.IsDevelopment())
 }
 
 // Resource endpoints registering
-app.AddTestEndpoints();
+app.AddUserEndpoints();
 app.UseHttpsRedirection();
 
-
-// TODO: Add to its own file
-app.MapGet("options", (
-    IOptions<ApplicationOptions> options,
+app.MapGet("options", (IOptions<ApplicationOptions> options,
     IOptionsSnapshot<ApplicationOptions> optionsSnapshot,
-    IOptionsMonitor<ApplicationOptions> optionsMonitor) =>
-{
-    var response = new
-    {
-        // Singleton, does not change when the appsetting ApplicationOptions examplevalue changes
-        OptionsValue = options.Value.ExampleValue,
-        
-        // Does change when the appsetting ApplicationOptions examplevalue changes
-        SnapshotValue = optionsSnapshot.Value.ExampleValue,
-        
-        // Is singleton but still shows latets appsetting ApplicationOptions examplevalue value
-        MonitorValue = optionsMonitor.CurrentValue.ExampleValue
-    };
-    return Results.Ok((response));
-});
+    IOptionsMonitor<ApplicationOptions> optionsMonitor) => 
+    options.Value.GetResult(options, optionsSnapshot, optionsMonitor));
 
 app.Run();
-
-public class ApplicationOptions
-{
-    public const string Key = "Application";
-    public string ExampleValue { get; init; } = string.Empty;
-}

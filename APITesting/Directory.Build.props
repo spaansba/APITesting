@@ -1,0 +1,6 @@
+﻿<!-- Anything that goes in a PropertyGroup in any of the .csproj files, should be put here so it afects all projects-->
+<Project>
+    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+</Project>

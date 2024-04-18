@@ -26,4 +26,18 @@ public class TestClient
     {
 
     }
+    
+    public Task<IEnumerable<UserProfileResponse>> GetAllUsers()
+    {
+        throw new NotImplementedException();
+    }
+    public Task<UserProfileResponse> GetUser(int id)
+    {
+        throw new NotImplementedException();
+    }
+    public Task<UserProfileResponse> UpdateUser(int id, UserProfileUpdateRequest request)
+    {
+        throw new NotImplementedException();
+    }
+    
 }

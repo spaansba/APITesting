@@ -1,6 +1,16 @@
 @APITesting_HostAddress = http://localhost:5169
+@id = 1
+###
 
-GET {{APITesting_HostAddress}}/weatherforecast/
+GET {{APITesting_HostAddress}}/api/users
 Accept: application/json
 
 ###
+
+GET {{APITesting_HostAddress}}/api/user/{{id}}
+Accept: application/json
+
+###
+
+POST {{APITesting_HostAddress}}/api/user/{{id}}
+Accept: application/json

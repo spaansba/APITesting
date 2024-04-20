@@ -1,5 +1,5 @@
 using APITesting;
-using Microsoft.Extensions.Options;
+using APITesting.EndPoints;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +14,8 @@ builder.Logging.AddSerilog(logger);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<ApplicationOptions>();
 builder.Services.AddProblemDetails(); // create an exception handler that will generate a ProblemDetails if an exception occurs https://www.rfc-editor.org/rfc/rfc7807.html
 
 builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Key));
@@ -36,9 +37,10 @@ if (app.Environment.IsDevelopment())
 app.AddUserEndpoints();
 app.UseHttpsRedirection();
 
-app.MapGet("options", (IOptions<ApplicationOptions> options,
-    IOptionsSnapshot<ApplicationOptions> optionsSnapshot,
-    IOptionsMonitor<ApplicationOptions> optionsMonitor) => 
-    options.Value.GetResult(options, optionsSnapshot, optionsMonitor));
+//
+// app.MapGet("options", (IOptions<ApplicationOptions> options,
+//     IOptionsSnapshot<ApplicationOptions> optionsSnapshot,
+//     IOptionsMonitor<ApplicationOptions> optionsMonitor) => 
+//     options.Value.GetResult(options, optionsSnapshot, optionsMonitor));
 
 app.Run();

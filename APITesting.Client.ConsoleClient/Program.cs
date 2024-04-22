@@ -16,50 +16,49 @@ httpClient.BaseAddress = new Uri("https://localhost:7072");
 
 var client = new TestClient(httpClient);
 
-var newUser = new UserProfileCreateRequest(Username: "j.smith", FullName: "John Smith", DisplayName: "John");
+var newTestUser = new UserProfileCreateRequest(Username: "j.smith", FullName: "John Smith", DisplayName: "John");
 
-string? userInput;
+if ((await client.CreateUser(newTestUser)).TryGetValue(out var testUser, out var error))
+{
+    Console.WriteLine("Temp user added");
+    Console.WriteLine(testUser.ToString());
+}
+else
+{
+    Console.WriteLine("ERROR");
+    Console.WriteLine(error.ToString());
+}
+
+var stopOperation = false;
 do
 {
-    Console.WriteLine("Get, Post, Patch, Put, Delete, Press x to cancel");
-    userInput = Console.ReadLine()?.ToLower();
-    switch (userInput)
+    Console.WriteLine("[G]et, [P]ost, P[a]tch, [D]elete, Press [X] to cancel");
+    switch (Console.ReadKey(true).Key)
     {
-        case "get":
-            var user = APIMethods.GetUser(client); 
+        case ConsoleKey.G:
+            var user = await APIMethods.GetUser(client); 
             Console.WriteLine(user?.ToString());
             break;
-        case "post":
-            Console.WriteLine("Create a new user");
-            break;
-        case "patch":
-            
-            break;
-        case "put":
+        case ConsoleKey.P:
             APIMethods.CreateUser(client);
             break;
-        case "delete":
-            Console.WriteLine("ID of user to be deleted");
+        case ConsoleKey.A:
+            APIMethods.PatchUser(client);
             break;
-        case "x":
+        case ConsoleKey.D:
+            APIMethods.DeleteUser(client);
+            break;
+        case ConsoleKey.X:
             Console.WriteLine("Operation cancelled");
+            stopOperation = true;
             break;
         default:
             Console.WriteLine("Invalid input. Please try again.");
             break;
     }
-} while (userInput != "x");
+    Console.WriteLine("");
+} while (!stopOperation);
 
 
 
-// if ((await client.CreateUser(newUser)).TryGetValue(out var user, out var error))
-// {
-//     Console.WriteLine("SUCCESS");
-//     Console.WriteLine(user.ToString());
-// }
-// else
-// {
-//     Console.WriteLine("ERROR");
-//     Console.WriteLine(error.ToString());
-// }
 

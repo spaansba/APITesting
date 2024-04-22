@@ -128,6 +128,15 @@ public static class UserEndpoints
         return await test.GetUserProfile(id, cancellationToken) is not { } result ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
  
+    private static async Task<IResult> GetId(
+        [FromServices] IUserService test,
+        [FromRoute] int id,
+        CancellationToken cancellationToken
+    )
+    {
+        return await test.GetUserProfile(id, cancellationToken) is not { } result ? TypedResults.NotFound() : TypedResults.Ok(result);
+    }
+    
     private static async Task<IResult> UpdateUser(
         [FromServices] IUserService test,
         [FromRoute] int id,

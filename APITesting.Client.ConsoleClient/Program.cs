@@ -40,13 +40,13 @@ do
             Console.WriteLine(user?.ToString());
             break;
         case ConsoleKey.P:
-            APIMethods.CreateUser(client);
+            await APIMethods.CreateUser(client);
             break;
         case ConsoleKey.A:
-            APIMethods.PatchUser(client);
+            await APIMethods.PatchUser(client);
             break;
         case ConsoleKey.D:
-            APIMethods.DeleteUser(client);
+            await APIMethods.DeleteUser(client);
             break;
         case ConsoleKey.X:
             Console.WriteLine("Operation cancelled");

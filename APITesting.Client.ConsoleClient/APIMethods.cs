@@ -22,7 +22,7 @@ public static class APIMethods
         return null;
     }
     
-    public static async void CreateUser(TestClient client)
+    public static async Task CreateUser(TestClient client)
     {
         Console.WriteLine("Enter a username");
         var userName = ApiHelperMethods.GetStringFromUser();
@@ -43,7 +43,7 @@ public static class APIMethods
         }
     }
 
-    public static async void PatchUser(TestClient client)
+    public static async Task PatchUser(TestClient client)
     {
         var id = await ApiHelperMethods.GetValidIdFromUser(client);
         if (id == -1)
@@ -97,7 +97,7 @@ public static class APIMethods
         
     }
 
-    public static async void DeleteUser(TestClient client)
+    public static async Task DeleteUser(TestClient client)
     {
         var id = await ApiHelperMethods.GetValidIdFromUser(client);
         if (id == -1)

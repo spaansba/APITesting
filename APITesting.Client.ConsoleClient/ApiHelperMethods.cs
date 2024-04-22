@@ -47,7 +47,7 @@ public static class ApiHelperMethods
         return userInput;
     }
 
-    public static async Task<int> GetValidIdFromUser(TestClient client)
+    public static async ValueTask<int> GetValidIdFromUser(TestClient client)
     {
         int id;
         bool isValidId;
@@ -66,7 +66,7 @@ public static class ApiHelperMethods
         return id;
     }
     
-    private static async Task<bool> IdExists(TestClient client, int id)
+    private static async ValueTask<bool> IdExists(TestClient client, int id)
     {
         if ((await client.GetUser(id)).TryGetValue(out _, out var error))
         {

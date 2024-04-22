@@ -1,9 +1,6 @@
-﻿using System.Net;
-using System.Runtime.InteropServices.JavaScript;
-using APITesting;
+﻿using APITesting;
 using APITesting.Client;
 using APITesting.Client.ConsoleClient;
-using APITesting.Client.Result;
 
 // IMPORTANT: This is not the correct way of using HttpClient, but this is just temporary...
 using var clientHandler = new HttpClientHandler();

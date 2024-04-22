@@ -20,15 +20,15 @@ public static class ApiHelperMethods
     
     public static int GetIntFromUser()
     {
+        var isValidInput = false;
         int selectedId;
-        bool isValidInput;
         do
         {
-            var userInput = Console.ReadLine();
-
-            isValidInput = int.TryParse(userInput, out selectedId);
-
-            if (!isValidInput)
+            if(int.TryParse(Console.ReadLine(), out selectedId))
+            {
+                isValidInput = true;
+            }
+            else
             {
                 Console.WriteLine("Invalid input. Please enter an integer.");
             }

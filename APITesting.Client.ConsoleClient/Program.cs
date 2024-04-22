@@ -30,23 +30,24 @@ else
 }
 
 var stopOperation = false;
+var cancellationToken = new CancellationToken();
 do
 {
     Console.WriteLine("[G]et, [P]ost, P[a]tch, [D]elete, Press [X] to cancel");
     switch (Console.ReadKey(true).Key)
     {
         case ConsoleKey.G:
-            var user = await APIMethods.GetUser(client); 
+            var user = await APIMethods.GetUser(client, cancellationToken); 
             Console.WriteLine(user?.ToString());
             break;
         case ConsoleKey.P:
-            await APIMethods.CreateUser(client);
+            await APIMethods.CreateUser(client, cancellationToken);
             break;
         case ConsoleKey.A:
-            await APIMethods.PatchUser(client);
+            await APIMethods.PatchUser(client, cancellationToken);
             break;
         case ConsoleKey.D:
-            await APIMethods.DeleteUser(client);
+            await APIMethods.DeleteUser(client, cancellationToken);
             break;
         case ConsoleKey.X:
             Console.WriteLine("Operation cancelled");

@@ -47,7 +47,7 @@ public static class ApiHelperMethods
         return userInput;
     }
 
-    public static async ValueTask<int> GetValidIdFromUser(TestClient client)
+    public static async ValueTask<int> GetValidIdFromUser(TestClient client, CancellationToken cancellationToken)
     {
         int id;
         bool isValidId;
@@ -55,7 +55,7 @@ public static class ApiHelperMethods
         {
             Console.WriteLine("Enter an ID (integer)");
             id = GetIntFromUser();
-            isValidId = await IdExists(client, id);
+            isValidId = await IdExists(client, id, cancellationToken);
             if (!isValidId)
             {
                 if (AskToStopOperation("Press x to cancel Get request, Press any other key to try another id"))
@@ -66,9 +66,9 @@ public static class ApiHelperMethods
         return id;
     }
     
-    private static async ValueTask<bool> IdExists(TestClient client, int id)
+    private static async ValueTask<bool> IdExists(TestClient client, int id, CancellationToken cancellationToken)
     {
-        if ((await client.GetUser(id)).TryGetValue(out _, out var error))
+        if ((await client.GetUser(id, cancellationToken)).TryGetValue(out _, out var error))
         {
             return true;
         }

@@ -5,14 +5,14 @@ namespace APITesting.Client.ConsoleClient;
 // I know these should be in separate files but its mostly for testing
 public static class APIMethods
 {
-    public static async Task<UserProfileResponse?> GetUser(TestClient client)
+    public static async Task<UserProfileResponse?> GetUser(TestClient client, CancellationToken cancellationToken)
     {
 
-        var id = await ApiHelperMethods.GetValidIdFromUser(client);
+        var id = await ApiHelperMethods.GetValidIdFromUser(client, cancellationToken);
         if (id == -1)
             return null;
 
-        if ((await client.GetUser(id)).TryGetValue(out var user, out var error))
+        if ((await client.GetUser(id, cancellationToken)).TryGetValue(out var user, out var error))
         {
             return user;
         }
@@ -22,7 +22,7 @@ public static class APIMethods
         return null;
     }
     
-    public static async Task CreateUser(TestClient client)
+    public static async Task CreateUser(TestClient client, CancellationToken cancellationToken)
     {
         Console.WriteLine("Enter a username");
         var userName = ApiHelperMethods.GetStringFromUser();
@@ -32,7 +32,7 @@ public static class APIMethods
         var displayName = ApiHelperMethods.GetStringFromUser();
         var newUser = new UserProfileCreateRequest(userName, firstName, displayName);
         
-        if(( await client.CreateUser(newUser)).TryGetValue(out var user, out var error))
+        if(( await client.CreateUser(newUser, cancellationToken)).TryGetValue(out var user, out var error))
         {
             Console.WriteLine($"User {displayName} successfully created with ID {user.Id}");
         }
@@ -43,13 +43,13 @@ public static class APIMethods
         }
     }
 
-    public static async Task PatchUser(TestClient client)
+    public static async Task PatchUser(TestClient client, CancellationToken cancellationToken)
     {
-        var id = await ApiHelperMethods.GetValidIdFromUser(client);
+        var id = await ApiHelperMethods.GetValidIdFromUser(client, cancellationToken);
         if (id == -1)
             return;
         
-        var result = await client.GetUser(id);
+        var result = await client.GetUser(id, cancellationToken);
         if (!result.TryGetValue(out var currentUserProfile, out var getError))
         {
             Console.WriteLine("ERROR");
@@ -85,7 +85,7 @@ public static class APIMethods
         
         var updatedUser = new UserProfileUpdateRequest(newFullName, newDisplayName);
 
-        if ((await client.UpdateUser(id, updatedUser)).TryGetValue(out var user, out var updateError))
+        if ((await client.UpdateUser(id, updatedUser, cancellationToken)).TryGetValue(out var user, out var updateError))
         {
             Console.WriteLine($"User {user.DisplayName} successfully updated");
         }
@@ -97,13 +97,13 @@ public static class APIMethods
         
     }
 
-    public static async Task DeleteUser(TestClient client)
+    public static async Task DeleteUser(TestClient client, CancellationToken cancellationToken)
     {
-        var id = await ApiHelperMethods.GetValidIdFromUser(client);
+        var id = await ApiHelperMethods.GetValidIdFromUser(client, cancellationToken);
         if (id == -1)
             return;
         
-        if (client.DeleteUser(id).IsCompletedSuccessfully)
+        if (client.DeleteUser(id, cancellationToken).IsCompletedSuccessfully)
         {
             Console.WriteLine($"User with id {id} successfully deleted");
         }

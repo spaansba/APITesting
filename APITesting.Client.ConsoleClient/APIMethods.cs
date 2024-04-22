@@ -1,11 +1,9 @@
-﻿using System.Net;
-
-namespace APITesting.Client.ConsoleClient;
+﻿namespace APITesting.Client.ConsoleClient;
 
 // I know these should be in separate files but its mostly for testing
 public static class APIMethods
 {
-    public static async Task<UserProfileResponse?> GetUser(TestClient client, CancellationToken cancellationToken)
+    public static async Task<UserProfileResponse?> GetUser(ITestClient client, CancellationToken cancellationToken)
     {
 
         var id = await ApiHelperMethods.GetValidIdFromUser(client, cancellationToken);
@@ -22,7 +20,7 @@ public static class APIMethods
         return null;
     }
     
-    public static async Task CreateUser(TestClient client, CancellationToken cancellationToken)
+    public static async Task CreateUser(ITestClient client, CancellationToken cancellationToken)
     {
         Console.WriteLine("Enter a username");
         var userName = ApiHelperMethods.GetStringFromUser();
@@ -43,7 +41,7 @@ public static class APIMethods
         }
     }
 
-    public static async Task PatchUser(TestClient client, CancellationToken cancellationToken)
+    public static async Task PatchUser(ITestClient client, CancellationToken cancellationToken)
     {
         var id = await ApiHelperMethods.GetValidIdFromUser(client, cancellationToken);
         if (id == -1)
@@ -97,19 +95,21 @@ public static class APIMethods
         
     }
 
-    public static async Task DeleteUser(TestClient client, CancellationToken cancellationToken)
+    public static async Task DeleteUser(ITestClient client, CancellationToken cancellationToken)
     {
         var id = await ApiHelperMethods.GetValidIdFromUser(client, cancellationToken);
         if (id == -1)
             return;
-        
-        if (client.DeleteUser(id, cancellationToken).IsCompletedSuccessfully)
+
+        var result = await client.DeleteUser(id, cancellationToken);
+        if (result.IsSuccess)
         {
             Console.WriteLine($"User with id {id} successfully deleted");
         }
         else
         {
             Console.WriteLine("ERROR");
+            Console.WriteLine(result.Error.ToString());
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System.Net.Http.Json;
-using APITesting.Client.Result;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace APITesting.Client;
+﻿namespace APITesting.Client;
 
 public interface ITestClient
 {
@@ -23,19 +19,6 @@ public class TestClient : ITestClient
     public TestClient(HttpClient client)
     {
         this.client = client;
-    }
-    
-    [ActivatorUtilitiesConstructor] //DI frameworks will use this ctor
-    public TestClient(IHttpClientFactory clientFactory)
-        : this(clientFactory.CreateClient(HttpClientName))
-    {
-
-    }
-
-    public TestClient(IHttpClientFactory clientFactory, Func<IHttpClientFactory, HttpClient> createClient)
-        : this(createClient(clientFactory))
-    {
-
     }
     
     /// <summary>

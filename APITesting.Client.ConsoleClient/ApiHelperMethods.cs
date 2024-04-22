@@ -47,7 +47,7 @@ public static class ApiHelperMethods
         return userInput;
     }
 
-    public static async ValueTask<int> GetValidIdFromUser(TestClient client, CancellationToken cancellationToken)
+    public static async Task<int> GetValidIdFromUser(ITestClient client, CancellationToken cancellationToken)
     {
         int id;
         bool isValidId;
@@ -66,7 +66,7 @@ public static class ApiHelperMethods
         return id;
     }
     
-    private static async ValueTask<bool> IdExists(TestClient client, int id, CancellationToken cancellationToken)
+    private static async Task<bool> IdExists(ITestClient client, int id, CancellationToken cancellationToken)
     {
         if ((await client.GetUser(id, cancellationToken)).TryGetValue(out _, out var error))
         {

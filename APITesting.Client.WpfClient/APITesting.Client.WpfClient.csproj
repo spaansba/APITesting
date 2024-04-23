@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapplo.Microsoft.Extensions.Hosting.Wpf" Version="1.0.14" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ApplicationDefinition Remove="App.xaml" />
+      <Page Include="App.xaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\APITesting.Client\APITesting.Client.csproj" />
+      <ProjectReference Include="..\APITesting.Server.Data\APITesting.Server.Data.csproj" />
+      <ProjectReference Include="..\APITesting.Server.WebApi\APITesting.Server.WebApi.csproj" />
+    </ItemGroup>
+
+</Project>

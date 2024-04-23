@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace APITesting;
+namespace APITesting.EndPoints;
 
 public class ApplicationOptions
 {

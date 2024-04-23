@@ -11,16 +11,16 @@ internal static class Program
     {
         await Host.CreateDefaultBuilder(args)
             .ConfigureServices()
-            .ConfigureWpf()
+            .AddWpfToHostBuilder()
             .UseWpfLifetime()
             .Build()
             .RunAsync();
     }
 
-    private static IHostBuilder ConfigureWpf(this IHostBuilder hostBuilder)
-        => hostBuilder.ConfigureWpf(ConfigureWpf);
+    private static IHostBuilder AddWpfToHostBuilder(this IHostBuilder hostBuilder)
+        => hostBuilder.ConfigureWpf(ConfigureWpfBuilder);
 
-    private static void ConfigureWpf(IWpfBuilder wpfBuilder) => wpfBuilder
+    private static void ConfigureWpfBuilder(IWpfBuilder wpfBuilder) => wpfBuilder
         .UseApplication<App>()
         .UseWindow<MainWindow>();
 

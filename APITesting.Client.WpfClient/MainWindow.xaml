@@ -5,8 +5,128 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:APITesting.Client.WpfClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance Type=local:AppViewModel, IsDesignTimeCreatable=False}"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
+        Background="{DynamicResource MaterialDesign.Brush.Background}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}">
 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <DockPanel LastChildFill="False" Grid.Row="0" Grid.Column="0">
+            <Button DockPanel.Dock="Top"
+                    Command="{Binding AddUserCommand}"
+                    Content="New User"
+                    HorizontalAlignment="Left"/>
+            <ItemsControl DockPanel.Dock="Left"
+                          ItemsSource="{Binding Users}"
+                          Grid.IsSharedSizeScope="True">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Label" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <WrapPanel Grid.Row="0" Grid.Column="0"
+                                           Grid.ColumnSpan="2"
+                                           HorizontalAlignment="Right">
+                                    <Button Content="Delete"
+                                            IsEnabled="{Binding DataContext.DeletePossible, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}"
+                                            Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" />
+                                    <Button Content="Edit"
+                                            CommandParameter="{Binding}"
+                                            Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" />
+                                </WrapPanel>
+                                <TextBlock Grid.Row="1" Grid.Column="0"
+                                           Margin="8,0,0,0"
+                                           Text="Username: " HorizontalAlignment="Right" />
+                                <TextBlock Grid.Row="1" Grid.Column="1"
+                                           Text="{Binding Username}" />
+                                <TextBlock Grid.Row="2" Grid.Column="0"
+                                           Margin="8,0,0,0"
+                                           Text="Full Name: " HorizontalAlignment="Right" />
+                                <TextBlock Grid.Row="2" Grid.Column="1"
+                                           Text="{Binding FullName}" />
+                                <TextBlock Grid.Row="3" Grid.Column="0"
+                                           Margin="8,0,0,0"
+                                           Text="Display Name: " HorizontalAlignment="Right" />
+                                <TextBlock Grid.Row="3" Grid.Column="1"
+                                           Text="{Binding DisplayName}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+        
+        <!-- edit buttons -->
+        <ItemsControl Grid.Row="0" Grid.Column="1" 
+                      IsEnabled="{Binding IsEditing}"
+                      ItemsSource="{Binding SelectedUser}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                    
+                <Label Grid.Row="0" Grid.Column="0" 
+                       Content="Edit User"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Width="150" IsEnabled="False"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
+                         Text="{Binding  SelectedUser.FullName, FallbackValue=.}"/>
+                
+                <Label Grid.Row="1" Grid.Column="0"
+                        Content="Full Name"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Width="150"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Text="{Binding  SelectedUser.FullName, FallbackValue=.}"/>
+                
+                <Label Grid.Row="2" Grid.Column="0"
+                       Content="Display Name"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Width="150"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
+                         Text="{Binding  SelectedUser.DisplayName, FallbackValue=.}"/>
+                
+                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                        Content="Send Edit"
+                        Margin="50,0,10,0"
+                        CommandParameter="{Binding SelectedUser}"
+                        Command="{Binding FinalizeEditUserCommand}"/>
+            </Grid>
+        </ItemsControl>
     </Grid>
 </Window>

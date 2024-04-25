@@ -12,6 +12,13 @@ public readonly struct ApiError : IEquatable<ApiError>
         this.data = data;
         this.StatusCode = statusCode;
     }
+    
+    public Exception CreateException() => this.data switch
+    {
+        Exception ex => ex,
+        _ => new HttpRequestException(this.Message, this.Exception, this.StatusCode),
+    };
+    
  
     public ApiError(ProblemDetails problemDetails, HttpStatusCode statusCode)
     {

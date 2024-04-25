@@ -3,6 +3,9 @@ using Microsoft.Extensions.Hosting;
 
 namespace APITesting.Client.ConsoleClient;
 
+/// <summary>
+/// BackgroundService if you don't care about the result instantly and IHostedService if you need to wait on the result
+/// </summary>
 public sealed class ConsoleClientService : BackgroundService
 {
     private readonly IServiceProvider serviceProvider;

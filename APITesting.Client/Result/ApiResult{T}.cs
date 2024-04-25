@@ -47,15 +47,12 @@ public readonly struct ApiResult<T> : IEquatable<ApiResult<T>>
     };
 
     public bool Equals(ApiResult<T> other) => Equals(other, ignoreStatusCode: false);
-
-
     public bool Equals(T? other) => EqualityComparer<T>.Default.Equals(this.Value, other);
     public bool Equals(ApiError other, bool ignoreStatusCode) => this.Error.Equals(other, ignoreStatusCode: ignoreStatusCode);
     public bool Equals(ApiError other) => this.Error.Equals(other, ignoreStatusCode: false);
     public bool Equals(Exception? other) => other is null ? this.IsSuccess : this.Error.Equals(other);
-
     public bool Equals(ProblemDetails? other) => other is null ? this.IsSuccess : this.Error.Equals(other);
-
+    public T GetValueOrThrow() => this.TryGetValue(out var value, out var error) ? value : throw error.CreateException();
     public override bool Equals(object? obj) => obj switch
     {
         ApiResult<T> other => this.Equals(other),

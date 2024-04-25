@@ -11,14 +11,15 @@ internal static class Program
     {
         await Host.CreateDefaultBuilder(args)
             .ConfigureServices()
-            .AddWpfToHostBuilder()
-            .UseWpfLifetime()
+            .ConfigureServices(static services => services.AddHostedService<DataInitializationService>()) // is adding an IHostedService that needs to start before the WPF hosted service.eds to
+            .AddWpfToHostBuilder() // This should always be the last thing we do before building
             .Build()
             .RunAsync();
     }
 
     private static IHostBuilder AddWpfToHostBuilder(this IHostBuilder hostBuilder)
-        => hostBuilder.ConfigureWpf(ConfigureWpfBuilder);
+        => hostBuilder.ConfigureWpf(ConfigureWpfBuilder)
+            .UseWpfLifetime();
 
     private static void ConfigureWpfBuilder(IWpfBuilder wpfBuilder) => wpfBuilder
         .UseApplication<App>()
@@ -28,5 +29,6 @@ internal static class Program
         => hostBuilder.ConfigureServices(ConfigureServices);
 
     private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-        => services.AddTestClient(context.HostingEnvironment, context.Configuration);
+        => services.AddTestClient(context.HostingEnvironment, context.Configuration)
+            .AddTransient<AppViewModel>();
 }

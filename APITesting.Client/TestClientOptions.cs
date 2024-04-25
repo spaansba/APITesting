@@ -20,12 +20,15 @@ public sealed class ValidateTestClientOptions : IValidateOptions<TestClientOptio
         if(!Uri.TryCreate(options.ServerUri, UriKind.Absolute, out var uri))
             return CreateUriError($"{nameof(TestClientOptions.ServerUri)} is not a valid URI (Provided value: {options.ServerUri})");
         if(uri.Scheme.Equals("http", StringComparison.OrdinalIgnoreCase) || uri.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
-            return ValidateOptionsResult.Success;
+            return ValidateOptionsResult.Success;   
+        
         return CreateUriError($"{nameof(TestClientOptions.ServerUri)} does not use http or https (Provided value: {options.ServerUri})");
     }
 
     private static ValidateOptionsResult CreateUriError(string error)
         => CreateError(nameof(TestClientOptions.ServerUri), error);
+    
+    
     private static ValidateOptionsResult CreateError(string member, string error)
         => ValidateOptionsResult.Fail($"validation failed for '{nameof(TestClientOptions)}' member: '{member}' with the error: '{error}'");
 }

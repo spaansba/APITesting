@@ -9,4 +9,8 @@ namespace APITesting.Client.WpfClient;
 /// </summary>
 public partial class App : Application
 {
+    public App()
+    {
+        this.InitializeComponent();
+    }
 }

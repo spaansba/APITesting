@@ -16,6 +16,12 @@ public readonly partial struct ApiResult : IEquatable<ApiResult>
         this.Error = error;
     }
 
+    public void ThrowIfFailure()
+    {
+        if (this.IsSuccess is false)
+            throw this.Error.CreateException();
+    }
+    
     public static ApiError Fail(ProblemDetails problemDetails, HttpStatusCode statusCode)
     {
         ThrowHelper.ThrowIfSuccessfulStatusCode(statusCode);

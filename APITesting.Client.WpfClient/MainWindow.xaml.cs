@@ -17,7 +17,7 @@ namespace APITesting.Client.WpfClient;
 /// </summary>
 public partial class MainWindow : Window, IWpfShell
 {
-    public MainWindow(AppViewModel appViewModel)
+    public MainWindow(Users.AppViewModel appViewModel)
     {
         this.InitializeComponent();
         this.DataContext = appViewModel;

@@ -1,10 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using APITesting.Client.WpfClient.Common;
+using APITesting.Client.WpfClient.Users.SidePanel;
+using APITesting.Contracts;
+using CommunityToolkit.Mvvm.Input;
 
-namespace APITesting.Client.WpfClient;
+namespace APITesting.Client.WpfClient.Users;
 
 // MIKE: changed to DependencyObject, is this oke?
 public sealed partial class AppViewModel : DependencyObject
@@ -14,10 +15,14 @@ public sealed partial class AppViewModel : DependencyObject
     public AppViewModel(ITestClient client)
     {
         this.client = client;
+        this.createNewPanel = new CreateNewSidePanelViewModel(this);
+        this.EditPanel = new EditSidePanelViewModel(this);
+        this.SidePanelViewModel = this.EditPanel;
         _ = this.PopulateUsers(); // Start a "fire and forget" task
     }
-
     
+    private readonly CreateNewSidePanelViewModel createNewPanel;
+    private readonly EditSidePanelViewModel EditPanel;
     
     private async Task PopulateUsers()
     {
@@ -47,11 +52,13 @@ public sealed partial class AppViewModel : DependencyObject
     public ObservableCollection<UserProfileResponse> Users { get; } = new();
 
     [RelayCommand]
-    private async Task AddUser(CancellationToken cancellationToken)
+    public async Task AddUser(UserProfileCreateRequest user, CancellationToken cancellationToken)
     {
-        var newUserResponse = await this.client.CreateUser(new ("joe.clark", "Joe Clark", "Joe Clark"), cancellationToken);
-        var newUser = newUserResponse.GetValueOrThrow();
-        Application.Current.Dispatcher.Invoke(() => this.Users.Add(newUser));
+        this.IsEditing = false;
+        SidePanelViewModel = this.createNewPanel;
+        // var newUserResponse = await this.client.CreateUser(new ("joe.clark", "Joe Clark", "Joe Clark"), cancellationToken);
+        // var newUser = newUserResponse.GetValueOrThrow();
+        // Application.Current.Dispatcher.Invoke(() => this.Users.Add(newUser));
     }
     
     [RelayCommand]
@@ -89,11 +96,13 @@ public sealed partial class AppViewModel : DependencyObject
     {
         IsEditing = true;
         SelectedUser = user;
-      //  throw new NotImplementedException();
+        this.SidePanelViewModel = this.EditPanel;
       return Task.CompletedTask;
     }
 
-    private static readonly DependencyProperty IsEditingProperty = DependencyProperty.Register(
+    #region  Dependency Properties
+    
+    public static readonly DependencyProperty IsEditingProperty = DependencyProperty.Register(
         name: nameof(IsEditing),
         propertyType: typeof(bool),
         ownerType: typeof(AppViewModel),
@@ -126,12 +135,26 @@ public sealed partial class AppViewModel : DependencyObject
         propertyType: typeof(UserProfileResponse),
         ownerType: typeof(AppViewModel),
         typeMetadata: new FrameworkPropertyMetadata(null));
-    
+
+
+
     public UserProfileResponse? SelectedUser
     {
         get => this.GetValue<UserProfileResponse?>(SelectedUserProperty);
         set => this.SetValue<UserProfileResponse?>(SelectedUserProperty, value);
     }
+    
+    private static readonly DependencyProperty SidePanelViewModelProperty = DependencyProperty.Register(
+        name: nameof(SidePanelViewModel),
+        propertyType: typeof(SidePanelViewModel),
+        ownerType: typeof(AppViewModel),
+        typeMetadata: new FrameworkPropertyMetadata(null));
 
-    public string emptyString = string.Empty;
+    public SidePanelViewModel? SidePanelViewModel
+    {
+        get => this.GetValue<SidePanelViewModel?>(SidePanelViewModelProperty);
+        set => this.SetValue<SidePanelViewModel?>(SidePanelViewModelProperty, value);
+    }
+    
+    #endregion
 }

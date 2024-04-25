@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:APITesting.Client.WpfClient"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        d:DataContext="{d:DesignInstance Type=local:AppViewModel, IsDesignTimeCreatable=False}"
+        d:DataContext="{d:DesignInstance Type=users:AppViewModel, IsDesignTimeCreatable=False}"
         
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:users="clr-namespace:APITesting.Client.WpfClient.Users"
         TextElement.Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
         Background="{DynamicResource MaterialDesign.Brush.Background}"
         TextElement.FontWeight="Medium"
@@ -19,7 +20,6 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
-            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -79,54 +79,11 @@
             </ItemsControl>
         </DockPanel>
         
+        
+        <Border x:Name="SidePanel" Grid.Row="0"
+                Grid.Column="1" DockPanel.Dock="Left">
+            <ContentPresenter Content="{Binding SidePanelViewModel}" />
+        </Border>
         <!-- edit buttons -->
-        <ItemsControl Grid.Row="0" Grid.Column="1" 
-                      IsEnabled="{Binding IsEditing}"
-                      ItemsSource="{Binding SelectedUser}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                </Grid.RowDefinitions>
-                    
-                <Label Grid.Row="0" Grid.Column="0" 
-                       Content="Edit User"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Width="150" IsEnabled="False"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Top"
-                         Text="{Binding  SelectedUser.FullName, FallbackValue=.}"/>
-                
-                <Label Grid.Row="1" Grid.Column="0"
-                        Content="Full Name"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Width="150"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Top"
-                       Text="{Binding  SelectedUser.FullName, FallbackValue=.}"/>
-                
-                <Label Grid.Row="2" Grid.Column="0"
-                       Content="Display Name"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Top"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Width="150"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Top"
-                         Text="{Binding  SelectedUser.DisplayName, FallbackValue=.}"/>
-                
-                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-                        Content="Send Edit"
-                        Margin="50,0,10,0"
-                        CommandParameter="{Binding SelectedUser}"
-                        Command="{Binding FinalizeEditUserCommand}"/>
-            </Grid>
-        </ItemsControl>
     </Grid>
 </Window>

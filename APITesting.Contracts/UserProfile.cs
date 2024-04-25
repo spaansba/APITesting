@@ -1,4 +1,4 @@
-﻿namespace APITesting;
+﻿namespace APITesting.Contracts;
 
 public sealed record UserProfileResponse(
     int Id,

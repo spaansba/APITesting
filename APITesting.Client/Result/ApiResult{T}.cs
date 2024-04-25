@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using APITesting.Client.Result;
 
-namespace APITesting.Client;
+namespace APITesting.Client.Result;
 
 public readonly struct ApiResult<T> : IEquatable<ApiResult<T>>
     where T : notnull

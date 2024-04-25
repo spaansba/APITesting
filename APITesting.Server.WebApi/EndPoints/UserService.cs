@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using APITesting.Contracts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace APITesting.EndPoints;
  

@@ -1,8 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
-using APITesting.Client.Result;
 
-namespace APITesting.Client;
+namespace APITesting.Client.Result;
 
 public readonly partial struct ApiResult
 {

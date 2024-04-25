@@ -1,4 +1,5 @@
-﻿using Dapplo.Microsoft.Extensions.Hosting.Wpf;
+﻿using APITesting.Client.WpfClient.Users;
+using Dapplo.Microsoft.Extensions.Hosting.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -30,5 +31,5 @@ internal static class Program
 
     private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         => services.AddTestClient(context.HostingEnvironment, context.Configuration)
-            .AddTransient<AppViewModel>();
+            .AddTransient<Users.AppViewModel>();
 }

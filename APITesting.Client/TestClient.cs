@@ -1,4 +1,7 @@
-﻿namespace APITesting.Client;
+﻿using APITesting.Client.Result;
+using APITesting.Contracts;
+
+namespace APITesting.Client;
 
 public interface ITestClient
 {

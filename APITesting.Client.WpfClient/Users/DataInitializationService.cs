@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace APITesting.Client.WpfClient;
+namespace APITesting.Client.WpfClient.Users;
 
 public sealed class DataInitializationService : IHostedService
 {

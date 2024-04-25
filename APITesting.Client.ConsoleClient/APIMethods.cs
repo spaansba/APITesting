@@ -1,4 +1,6 @@
-﻿namespace APITesting.Client.ConsoleClient;
+﻿using APITesting.Contracts;
+
+namespace APITesting.Client.ConsoleClient;
 
 // I know these should be in separate files but its mostly for testing
 public static class APIMethods

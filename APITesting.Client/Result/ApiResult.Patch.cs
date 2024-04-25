@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace APITesting.Client;
+namespace APITesting.Client.Result;
 
 internal static partial class ApiResultHttpClientExtensions
 {

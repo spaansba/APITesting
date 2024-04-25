@@ -1,0 +1,53 @@
+﻿<Window x:Class="APITesting.Client.WpfClient.Users.SidePanel.CreateNewSidePanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:createNew="clr-namespace:APITesting.Client.WpfClient.Users.SidePanel"
+        d:DataContext="{d:DesignInstance Type=createNew:CreateNewSidePanelViewModel,
+                                              IsDesignTimeCreatable=False}"
+        mc:Ignorable="d"
+        Title="CreateNewSidePanel" Height="450" Width="800">
+    <ItemsControl>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+                
+            <Label Grid.Row="0" Grid.Column="0" 
+                   Content="Username"/>
+            <TextBox x:Name="UserNameBox" Grid.Row="0" Grid.Column="1" Width="150" 
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"/>
+            
+            <Label Grid.Row="1" Grid.Column="0"
+                    Content="Full Name"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"/>
+            <TextBox x:Name="FullNameBox"  Grid.Row="1" Grid.Column="1" Width="150"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"/>
+            
+            <Label Grid.Row="2" Grid.Column="0"
+                   Content="Display Name"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"/>
+            <TextBox x:Name="DisplayNameBox"  Grid.Row="2" Grid.Column="1" Width="150"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"/>
+            
+            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                    Content="Send Edit"
+                    Margin="50,0,10,0"
+                    Command="{Binding AddNewUser }"/>
+        </Grid>
+    </ItemsControl>
+</Window>

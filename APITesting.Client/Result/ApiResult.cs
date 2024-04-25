@@ -1,7 +1,6 @@
 ﻿using System.Net;
-using APITesting.Client.Result;
 
-namespace APITesting.Client;
+namespace APITesting.Client.Result;
 
 public readonly partial struct ApiResult : IEquatable<ApiResult>
 {

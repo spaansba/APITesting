@@ -20,27 +20,27 @@ public sealed class CreateNewSidePanelViewModel : SidePanelViewModel
     
     private async void CreateUser()
     {
-        // Ofcourse here goes a lot more validation
-        if (Username is "" or null)
-        {
-            MessageBox.Show("Fill in a Username");
-            return;
-        }
-        
-        if (FullName is "" or null)
-        {
-            MessageBox.Show("Fill in a Full Name");
-            return;
-        }
-
-        if (DisplayName is "" or null)
-        {
-            MessageBox.Show("Fill in a Display Name");
-            return;
-        }
-        
-        var createUserProfile = new UserProfileCreateRequest(Username, FullName, DisplayName);
-        await this.AppViewModel.AddUser(createUserProfile,default);
+        // // Ofcourse here goes a lot more validation
+        // if (Username is "" or null)
+        // {
+        //     MessageBox.Show("Fill in a Username");
+        //     return;
+        // }
+        //
+        // if (FullName is "" or null)
+        // {
+        //     MessageBox.Show("Fill in a Full Name");
+        //     return;
+        // }
+        //
+        // if (DisplayName is "" or null)
+        // {
+        //     MessageBox.Show("Fill in a Display Name");
+        //     return;
+        // }
+        //
+        // var createUserProfile = new UserProfileCreateRequest(Username, FullName, DisplayName);
+        // await this.AppViewModel.AddUser(createUserProfile,default);
     }
 
     #region Dependecy Properties

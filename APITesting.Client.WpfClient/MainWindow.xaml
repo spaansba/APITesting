@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:APITesting.Client.WpfClient"
+        xmlns:sidePanel="clr-namespace:APITesting.Client.WpfClient.Users.SidePanel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=users:AppViewModel, IsDesignTimeCreatable=False}"
@@ -50,7 +51,6 @@
                                            Grid.ColumnSpan="2"
                                            HorizontalAlignment="Right">
                                     <Button Content="Delete"
-                                            IsEnabled="{Binding DataContext.DeletePossible, RelativeSource={RelativeSource AncestorType=Window}}"
                                             CommandParameter="{Binding}"
                                             Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" />
                                     <Button Content="Edit"
@@ -82,7 +82,7 @@
         
         <Border x:Name="SidePanel" Grid.Row="0"
                 Grid.Column="1" DockPanel.Dock="Left">
-            <ContentPresenter Content="{Binding SidePanelViewModel}" />
+            <ContentPresenter Content="{Binding SidePanel}" />
         </Border>
         <!-- edit buttons -->
     </Grid>

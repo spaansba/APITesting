@@ -1,4 +1,4 @@
-﻿using APITesting.Client.WpfClient.Users;
+﻿using APITesting.Client.WpfClient.Data;
 using Dapplo.Microsoft.Extensions.Hosting.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +12,9 @@ namespace APITesting.Client.WpfClient
         {
             await Host.CreateDefaultBuilder(args)
                 .ConfigureServices()
-                .ConfigureServices(static services => services.AddHostedService<DataInitializationService>()) // is adding an IHostedService that needs to start before the WPF hosted service.eds to
+                .ConfigureServices(static services => services
+                    .AddHostedService<DataInitializationService>()
+                    .AddHostedService<DataManager>()) // is adding an IHostedService that needs to start before the WPF hosted service.eds to
                 .AddWpfToHostBuilder() // This should always be the last thing we do before building
                 .Build()
                 .RunAsync();

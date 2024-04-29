@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using APITesting.Client.WpfClient.Common;
+using APITesting.Client.WpfClient.Data;
 using APITesting.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -27,7 +28,9 @@ public sealed partial class UserListViewModel : ObservableObject
     {
         try
         {
-            var usersToLoad = (await this.client.GetAllUsers()).GetValueOrThrow();
+            //UserListViewModel sends a requestUserMessage, then DataManager listens to that message and runs client. GetAllUsers which in turn returns a Task<IEnumerable<UserProfileResponse>>
+            // which will be sent back to UserListViewModel
+            var usersToLoad = (await RequestUsersMessage.SendOrThrow());
             Application.Current.Dispatcher.Invoke(() =>
                 {
                     foreach (var user in usersToLoad)

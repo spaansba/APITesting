@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using APITesting.Client.WpfClient.Common;
 using APITesting.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace APITesting.Client.WpfClient.Users
 {
@@ -62,7 +64,9 @@ namespace APITesting.Client.WpfClient.Users
             {
                 var createUser = new UserProfileCreateRequest(Username, FullName, DisplayName);
                 await this.client.CreateUser(createUser, cancellationToken);
-            } 
+            }
+  
+            WeakReferenceMessenger.Default.Send<CloseDrawerMessage>();
         } 
     }
 }

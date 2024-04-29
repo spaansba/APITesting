@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace APITesting.Client.ConsoleClient;
-
-internal static class Program
+namespace APITesting.Client.ConsoleClient
 {
-    private static async Task Main(string[] args)
+    internal static class Program
+    {
+        private static async Task Main(string[] args)
     {
    
         var newHostBuilder = Host.CreateApplicationBuilder(args);
@@ -22,5 +22,6 @@ internal static class Program
 
         // RunConsoleAsync will run all Hosted Services ExecuteAsync methods one by one
         await newHostBuilder.RunConsoleAsync();
+    }
     }
 }

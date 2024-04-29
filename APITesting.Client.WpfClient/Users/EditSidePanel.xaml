@@ -1,19 +1,27 @@
-﻿<Window x:Class="APITesting.Client.WpfClient.Users.SidePanel.EditSidePanel"
+﻿<UserControl x:Class="APITesting.Client.WpfClient.Users.SidePanel.EditSidePanel"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="EditSidePanel" Height="450" Width="800"
-        xmlns:editSidePanel="clr-namespace:APITesting.Client.WpfClient.Users.SidePanel"
-        d:DataContext="{d:DesignInstance Type=editSidePanel:EditSidePanelViewModel,
+        Height="450" Width="800"
+        xmlns:common="clr-namespace:APITesting.Client.WpfClient.Common"
+        xmlns:users="clr-namespace:APITesting.Client.WpfClient.Users"
+        d:DataContext="{d:DesignInstance Type=users:EditUserViewModel,
                                               IsDesignTimeCreatable=False}">
-     <ItemsControl IsEnabled="{Binding  Path=AppViewModel.IsEditing}"
-                   ItemsSource="{Binding AppViewModel.SelectedUser }">
+    
+    <UserControl.Resources>
+        <common:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+        <common:BoolVisibilityConverter x:Key="NegatedBoolVisibilityConverter" Negated="True" />
+    </UserControl.Resources>
+    
+    
+    
+    <ItemsControl>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -25,11 +33,21 @@
                 
             <Label Grid.Row="0" Grid.Column="0" 
                    Content="Edit User"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Width="150" IsEnabled="False"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Top"
-                     Text="{Binding  AppViewModel.SelectedUser.FullName, FallbackValue=.}"/>
             
+            <!-- If editing show TextBox-->
+            <TextBox Grid.Row="0" Grid.Column="1" Width="150"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
+                         Text="{Binding Username}"
+                         Visibility="{Binding IsNewItem, Converter={StaticResource BoolVisibilityConverter}}" />
+            
+            <!-- If Adding new user show TextBox -->
+            <TextBlock Grid.Row="0" Grid.Column="1"
+                       Visibility="{Binding IsNewItem, Converter={StaticResource NegatedBoolVisibilityConverter}}">
+                <Run Text="{Binding Username, Mode=OneWay}" />
+                <Run Text="(Cannot change for existing users)" FontStyle="Italic" />
+            </TextBlock>
+    
             <Label Grid.Row="1" Grid.Column="0"
                     Content="Full Name"
                     HorizontalAlignment="Left"
@@ -37,7 +55,7 @@
             <TextBox Grid.Row="1" Grid.Column="1" Width="150"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   Text="{Binding  AppViewModel.SelectedUser.FullName, FallbackValue=.}"/>
+                   Text="{Binding FullName}"/>
             
             <Label Grid.Row="2" Grid.Column="0"
                    Content="Display Name"
@@ -46,13 +64,13 @@
             <TextBox Grid.Row="2" Grid.Column="1" Width="150"
                      HorizontalAlignment="Left"
                      VerticalAlignment="Top"
-                     Text="{Binding  AppViewModel.SelectedUser.DisplayName, FallbackValue=.}"/>
+                     Text="{Binding DisplayName}"/>
             
             <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-                    Content="Send Edit"
+                    Content="Send"
                     Margin="50,0,10,0"
-                    CommandParameter="{Binding AppViewModel.SelectedUser}"
-                    Command="{Binding AppViewModel.AddUserCommand}"/>
+                    CommandParameter="{Binding }"
+                    Command="{Binding SaveCommand}"/>
         </Grid>
     </ItemsControl>
-</Window>
+</UserControl>

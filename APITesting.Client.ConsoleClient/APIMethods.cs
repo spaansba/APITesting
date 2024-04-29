@@ -1,11 +1,11 @@
 ﻿using APITesting.Contracts;
 
-namespace APITesting.Client.ConsoleClient;
-
-// I know these should be in separate files but its mostly for testing
-public static class APIMethods
+namespace APITesting.Client.ConsoleClient
 {
-    public static async Task<UserProfileResponse?> GetUser(ITestClient client, CancellationToken cancellationToken)
+    // I know these should be in separate files but its mostly for testing
+    public static class APIMethods
+    {
+        public static async Task<UserProfileResponse?> GetUser(ITestClient client, CancellationToken cancellationToken)
     {
 
         var id = await ApiHelperMethods.GetValidIdFromUser(client, cancellationToken);
@@ -22,7 +22,7 @@ public static class APIMethods
         return null;
     }
     
-    public static async Task CreateUser(ITestClient client, CancellationToken cancellationToken)
+        public static async Task CreateUser(ITestClient client, CancellationToken cancellationToken)
     {
         Console.WriteLine("Enter a username");
         var userName = ApiHelperMethods.GetStringFromUser();
@@ -43,7 +43,7 @@ public static class APIMethods
         }
     }
 
-    public static async Task PatchUser(ITestClient client, CancellationToken cancellationToken)
+        public static async Task PatchUser(ITestClient client, CancellationToken cancellationToken)
     {
         var id = await ApiHelperMethods.GetValidIdFromUser(client, cancellationToken);
         if (id == -1)
@@ -97,7 +97,7 @@ public static class APIMethods
         
     }
 
-    public static async Task DeleteUser(ITestClient client, CancellationToken cancellationToken)
+        public static async Task DeleteUser(ITestClient client, CancellationToken cancellationToken)
     {
         var id = await ApiHelperMethods.GetValidIdFromUser(client, cancellationToken);
         if (id == -1)
@@ -113,5 +113,6 @@ public static class APIMethods
             Console.WriteLine("ERROR");
             Console.WriteLine(result.Error.ToString());
         }
+    }
     }
 }

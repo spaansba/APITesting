@@ -1,34 +1,34 @@
 ﻿using APITesting.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APITesting.EndPoints;
- 
-public interface IUserService
+namespace APITesting.EndPoints
 {
-    public Task<IEnumerable<UserProfileResponse>> GetAllUsers(CancellationToken cancellationToken);
-    public Task<UserProfileResponse?> GetUserProfile(int id, CancellationToken cancellationToken);
-    public Task<UserProfileResponse?> UpdateUserProfile(int id, UserProfileUpdateRequest request, CancellationToken cancellationToken);
-    public Task<UserProfileResponse?> CreateUserProfile(UserProfileCreateRequest request, CancellationToken cancellationToken);
-    public Task<bool> DeleteUserProfile(int id, CancellationToken cancellationToken);
-}
+    public interface IUserService
+    {
+        public Task<IEnumerable<UserProfileResponse>> GetAllUsers(CancellationToken cancellationToken);
+        public Task<UserProfileResponse?> GetUserProfile(int id, CancellationToken cancellationToken);
+        public Task<UserProfileResponse?> UpdateUserProfile(int id, UserProfileUpdateRequest request, CancellationToken cancellationToken);
+        public Task<UserProfileResponse?> CreateUserProfile(UserProfileCreateRequest request, CancellationToken cancellationToken);
+        public Task<bool> DeleteUserProfile(int id, CancellationToken cancellationToken);
+    }
  
-internal sealed class UserService : IUserService
-{
-    private readonly ILogger<UserService> logger;
+    internal sealed class UserService : IUserService
+    {
+        private readonly ILogger<UserService> logger;
  
-    private readonly Dictionary<int, UserProfileResponse> users = new();
-    private readonly HashSet<string> usernames = new();
-    private int nextId = 1;
+        private readonly Dictionary<int, UserProfileResponse> users = new();
+        private readonly HashSet<string> usernames = new();
+        private int nextId = 1;
  
-    public UserService(ILogger<UserService> logger)
+        public UserService(ILogger<UserService> logger)
     {
         this.logger = logger;
     }
-    public IEnumerable<UserProfileResponse> GetAllUsers() => this.users.Values.ToList();
+        public IEnumerable<UserProfileResponse> GetAllUsers() => this.users.Values.ToList();
  
-    public UserProfileResponse? GetUserProfile(int id) => users.GetValueOrDefault(id);
+        public UserProfileResponse? GetUserProfile(int id) => users.GetValueOrDefault(id);
     
-    public UserProfileResponse? UpdateUserProfile(int id, UserProfileUpdateRequest request)
+        public UserProfileResponse? UpdateUserProfile(int id, UserProfileUpdateRequest request)
     {
         if (this.users.TryGetValue(id, out var existing) is false)
         {
@@ -45,7 +45,7 @@ internal sealed class UserService : IUserService
         return existing;
     }
  
-    public UserProfileResponse? CreateUserProfile(UserProfileCreateRequest request)
+        public UserProfileResponse? CreateUserProfile(UserProfileCreateRequest request)
     {
         if (this.usernames.Contains(request.Username))
         {
@@ -65,7 +65,7 @@ internal sealed class UserService : IUserService
         return user;
     }
  
-    public bool DeleteUserProfile(int id)
+        public bool DeleteUserProfile(int id)
     {
         if (this.users.Remove(id, out var user) is false)
         {
@@ -77,21 +77,21 @@ internal sealed class UserService : IUserService
         return true;
     }
  
-    Task<IEnumerable<UserProfileResponse>> IUserService.GetAllUsers(CancellationToken cancellationToken) => Task.FromResult(GetAllUsers());
-    Task<UserProfileResponse?> IUserService.GetUserProfile(int id, CancellationToken cancellationToken)
-        => Task.FromResult(this.GetUserProfile(id));
-    Task<UserProfileResponse?> IUserService.UpdateUserProfile(int id, UserProfileUpdateRequest request, CancellationToken cancellationToken)
-        => Task.FromResult(this.UpdateUserProfile(id, request));
-    Task<UserProfileResponse?> IUserService.CreateUserProfile(UserProfileCreateRequest request, CancellationToken cancellationToken)
-        => Task.FromResult(this.CreateUserProfile(request));
-    Task<bool> IUserService.DeleteUserProfile(int id, CancellationToken cancellationToken)
-        => Task.FromResult(this.DeleteUserProfile(id));
-}
+        Task<IEnumerable<UserProfileResponse>> IUserService.GetAllUsers(CancellationToken cancellationToken) => Task.FromResult(GetAllUsers());
+        Task<UserProfileResponse?> IUserService.GetUserProfile(int id, CancellationToken cancellationToken)
+            => Task.FromResult(this.GetUserProfile(id));
+        Task<UserProfileResponse?> IUserService.UpdateUserProfile(int id, UserProfileUpdateRequest request, CancellationToken cancellationToken)
+            => Task.FromResult(this.UpdateUserProfile(id, request));
+        Task<UserProfileResponse?> IUserService.CreateUserProfile(UserProfileCreateRequest request, CancellationToken cancellationToken)
+            => Task.FromResult(this.CreateUserProfile(request));
+        Task<bool> IUserService.DeleteUserProfile(int id, CancellationToken cancellationToken)
+            => Task.FromResult(this.DeleteUserProfile(id));
+    }
  
 
-/// <summary>
-/// Extension class to register all Test APIs endpoints
-/// </summary>
+    /// <summary>
+    /// Extension class to register all Test APIs endpoints
+    /// </summary>
 
 // Cheatsheet
 // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/parameter-binding?view=aspnetcore-8.0
@@ -102,9 +102,9 @@ internal sealed class UserService : IUserService
 //     [FromServices] - From DI
 //     [AsParameters] and [FromForm] exist, but they aren't used as often
 
-public static class UserEndpoints
-{
-    public static void AddUserEndpoints(this IEndpointRouteBuilder app)
+    public static class UserEndpoints
+    {
+        public static void AddUserEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapGet("/api/users", GetAllUsers);
         app.MapGet("/api/user/{id:int}", GetUser);
@@ -113,55 +113,56 @@ public static class UserEndpoints
         app.MapDelete("/api/user/{id:int}", DeleteUser);
     }
  
-    private static async Task<IResult> GetAllUsers(
-        [FromServices] IUserService test,
-        CancellationToken cancellationToken
-    )
+        private static async Task<IResult> GetAllUsers(
+            [FromServices] IUserService test,
+            CancellationToken cancellationToken
+        )
     {
         return TypedResults.Ok(await test.GetAllUsers(cancellationToken));
     }
-    private static async Task<IResult> GetUser(
-        [FromServices] IUserService test,
-        [FromRoute] int id,
-        CancellationToken cancellationToken
-    )
+        private static async Task<IResult> GetUser(
+            [FromServices] IUserService test,
+            [FromRoute] int id,
+            CancellationToken cancellationToken
+        )
     {
         return await test.GetUserProfile(id, cancellationToken) is not { } result ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
  
-    private static async Task<IResult> GetId(
-        [FromServices] IUserService test,
-        [FromRoute] int id,
-        CancellationToken cancellationToken
-    )
+        private static async Task<IResult> GetId(
+            [FromServices] IUserService test,
+            [FromRoute] int id,
+            CancellationToken cancellationToken
+        )
     {
         return await test.GetUserProfile(id, cancellationToken) is not { } result ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
     
-    private static async Task<IResult> UpdateUser(
-        [FromServices] IUserService test,
-        [FromRoute] int id,
-        [FromBody] UserProfileUpdateRequest request,
-        CancellationToken cancellationToken
-    )
+        private static async Task<IResult> UpdateUser(
+            [FromServices] IUserService test,
+            [FromRoute] int id,
+            [FromBody] UserProfileUpdateRequest request,
+            CancellationToken cancellationToken
+        )
     {
         return await test.UpdateUserProfile(id, request, cancellationToken) is not { } result ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
-    private static async Task<IResult> CreateUser(
-        [FromServices] IUserService test,
-        [FromBody] UserProfileCreateRequest request,
-        CancellationToken cancellationToken
-    )
+        private static async Task<IResult> CreateUser(
+            [FromServices] IUserService test,
+            [FromBody] UserProfileCreateRequest request,
+            CancellationToken cancellationToken
+        )
     {
         return await test.CreateUserProfile(request, cancellationToken) is not { } result ? TypedResults.Conflict() : TypedResults.Ok(result);
     }
-    private static async Task<IResult> DeleteUser(
-        [FromServices] IUserService test,
-        [FromRoute] int id,
-        CancellationToken cancellationToken
-    )
+        private static async Task<IResult> DeleteUser(
+            [FromServices] IUserService test,
+            [FromRoute] int id,
+            CancellationToken cancellationToken
+        )
     {
         return await test.DeleteUserProfile(id, cancellationToken) ? TypedResults.NotFound() : TypedResults.Ok();
+    }
     }
 }
  

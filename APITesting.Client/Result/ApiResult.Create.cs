@@ -1,16 +1,16 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace APITesting.Client.Result;
-
-public readonly partial struct ApiResult
+namespace APITesting.Client.Result
 {
+    public readonly partial struct ApiResult
+    {
 
-    public static async Task<ApiResult<T>> CreateAsync<T>(
-        HttpResponseMessage response,
-        JsonSerializerOptions? jsonOptions,
-        CancellationToken cancellationToken
-    ) where T : notnull
+        public static async Task<ApiResult<T>> CreateAsync<T>(
+            HttpResponseMessage response,
+            JsonSerializerOptions? jsonOptions,
+            CancellationToken cancellationToken
+        ) where T : notnull
     {
         try
         {
@@ -30,11 +30,11 @@ public readonly partial struct ApiResult
         }
     }
 
-    public static async Task<ApiResult> CreateAsync(
-        HttpResponseMessage response,
-        JsonSerializerOptions? jsonOptions,
-        CancellationToken cancellationToken
-    )
+        public static async Task<ApiResult> CreateAsync(
+            HttpResponseMessage response,
+            JsonSerializerOptions? jsonOptions,
+            CancellationToken cancellationToken
+        )
     {
         try
         {
@@ -48,5 +48,6 @@ public readonly partial struct ApiResult
         {
             return Fail(ex, response.StatusCode);
         }
+    }
     }
 }

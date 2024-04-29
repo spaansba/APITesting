@@ -7,7 +7,7 @@
         xmlns:sidePanel="clr-namespace:APITesting.Client.WpfClient.Users.SidePanel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        d:DataContext="{d:DesignInstance Type=users:AppViewModel, IsDesignTimeCreatable=False}"
+        d:DataContext="{d:DesignInstance Type=local:AppViewModel, IsDesignTimeCreatable=False}"
         
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:users="clr-namespace:APITesting.Client.WpfClient.Users"
@@ -17,73 +17,10 @@
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <DockPanel LastChildFill="False" Grid.Row="0" Grid.Column="0">
-            <Button DockPanel.Dock="Top"
-                    Command="{Binding AddUserCommand}"
-                    Content="New User"
-                    HorizontalAlignment="Left"/>
-            <ItemsControl DockPanel.Dock="Left"
-                          ItemsSource="{Binding Users}"
-                          Grid.IsSharedSizeScope="True">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="1">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Label" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <WrapPanel Grid.Row="0" Grid.Column="0"
-                                           Grid.ColumnSpan="2"
-                                           HorizontalAlignment="Right">
-                                    <Button Content="Delete"
-                                            CommandParameter="{Binding}"
-                                            Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" />
-                                    <Button Content="Edit"
-                                            CommandParameter="{Binding}"
-                                            Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" />
-                                </WrapPanel>
-                                <TextBlock Grid.Row="1" Grid.Column="0"
-                                           Margin="8,0,0,0"
-                                           Text="Username: " HorizontalAlignment="Right" />
-                                <TextBlock Grid.Row="1" Grid.Column="1"
-                                           Text="{Binding Username}" />
-                                <TextBlock Grid.Row="2" Grid.Column="0"
-                                           Margin="8,0,0,0"
-                                           Text="Full Name: " HorizontalAlignment="Right" />
-                                <TextBlock Grid.Row="2" Grid.Column="1"
-                                           Text="{Binding FullName}" />
-                                <TextBlock Grid.Row="3" Grid.Column="0"
-                                           Margin="8,0,0,0"
-                                           Text="Display Name: " HorizontalAlignment="Right" />
-                                <TextBlock Grid.Row="3" Grid.Column="1"
-                                           Text="{Binding DisplayName}" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </DockPanel>
-        
-        
-        <Border x:Name="SidePanel" Grid.Row="0"
-                Grid.Column="1" DockPanel.Dock="Left">
-            <ContentPresenter Content="{Binding SidePanel}" />
-        </Border>
-        <!-- edit buttons -->
-    </Grid>
+        <materialDesign:DrawerHost 
+                RightDrawerCloseOnClickAway="False"
+                RightDrawerContent="{Binding Drawer.Content}"
+                IsRightDrawerOpen="{Binding Drawer.IsOpen}">
+                <ContentPresenter Content="{Binding Content}" />
+        </materialDesign:DrawerHost>
 </Window>

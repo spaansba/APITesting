@@ -10,16 +10,17 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Dapplo.Microsoft.Extensions.Hosting.Wpf;
 
-namespace APITesting.Client.WpfClient;
-
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window, IWpfShell
+namespace APITesting.Client.WpfClient
 {
-    public MainWindow(Users.AppViewModel appViewModel)
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window, IWpfShell
     {
-        this.InitializeComponent();
-        this.DataContext = appViewModel;
+        public MainWindow(AppViewModel appViewModel)
+        {
+            this.InitializeComponent();
+            this.DataContext = appViewModel;
+        }
     }
 }

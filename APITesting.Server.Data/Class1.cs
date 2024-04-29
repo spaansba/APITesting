@@ -1,5 +1,6 @@
-﻿namespace APITesting.Server.Data;
-
-public class Class1
+﻿namespace APITesting.Server.Data
 {
+    public class Class1
+    {
+    }
 }

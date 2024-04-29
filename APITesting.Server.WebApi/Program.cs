@@ -1,11 +1,11 @@
 using APITesting.EndPoints;
 using Serilog;
 
-namespace APITesting;
-
-internal static class Program
+namespace APITesting
 {
-    private static void Main(string[] args)
+    internal static class Program
+    {
+        private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -49,5 +49,6 @@ internal static class Program
         //     options.Value.GetResult(options, optionsSnapshot, optionsMonitor));
 
         app.Run();
+    }
     }
 }

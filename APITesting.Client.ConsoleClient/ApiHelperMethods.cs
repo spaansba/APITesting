@@ -1,13 +1,13 @@
 ﻿using System.Net;
 
-namespace APITesting.Client.ConsoleClient;
-
-/// <summary>
-/// Class designed to check if the user selected ID exists
-/// </summary>
-public static class ApiHelperMethods
+namespace APITesting.Client.ConsoleClient
 {
-    public static bool AskToStopOperation(string message)
+    /// <summary>
+    /// Class designed to check if the user selected ID exists
+    /// </summary>
+    public static class ApiHelperMethods
+    {
+        public static bool AskToStopOperation(string message)
     {
         Console.WriteLine(message);
         if (Console.ReadKey(true).Key == ConsoleKey.X)
@@ -18,7 +18,7 @@ public static class ApiHelperMethods
         return false;
     }
     
-    public static int GetIntFromUser()
+        public static int GetIntFromUser()
     {
         var isValidInput = false;
         int selectedId;
@@ -36,7 +36,7 @@ public static class ApiHelperMethods
         return selectedId;
     }
     
-    public static string GetStringFromUser()
+        public static string GetStringFromUser()
     {
         string userInput;
         do
@@ -47,7 +47,7 @@ public static class ApiHelperMethods
         return userInput;
     }
 
-    public static async Task<int> GetValidIdFromUser(ITestClient client, CancellationToken cancellationToken)
+        public static async Task<int> GetValidIdFromUser(ITestClient client, CancellationToken cancellationToken)
     {
         int id;
         bool isValidId;
@@ -66,7 +66,7 @@ public static class ApiHelperMethods
         return id;
     }
     
-    private static async Task<bool> IdExists(ITestClient client, int id, CancellationToken cancellationToken)
+        private static async Task<bool> IdExists(ITestClient client, int id, CancellationToken cancellationToken)
     {
         if ((await client.GetUser(id, cancellationToken)).TryGetValue(out _, out var error))
         {
@@ -86,4 +86,5 @@ public static class ApiHelperMethods
     }
 
 
+    }
 }

@@ -1,51 +1,68 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using APITesting.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
-namespace APITesting.Client.WpfClient.Users;
-
-public partial class EditUserViewModel : ObservableValidator
+namespace APITesting.Client.WpfClient.Users
 {
-    private readonly ITestClient client;
-    public EditUserViewModel(ITestClient client, UserProfileResponse? user = null)
+    public partial class EditUserViewModel : ObservableValidator
     {
-        this.client = client;
-        this.Id = user?.Id;
-        this.Username = user?.Username;
-        this.FullName = user?.FullName;
-        this.DisplayName = user?.DisplayName;
-    }
+        private readonly ITestClient client;
+        public EditUserViewModel(ITestClient client, UserProfileResponse? user = null)
+        {
+            this.client = client;
+            this.Id = user?.Id;
+            this.Username = user?.Username;
+            this.FullName = user?.FullName;
+            this.DisplayName = user?.DisplayName;
+        }
+        
 
-    private int? Id { get; } 
-    public bool IsNewItem => this.Id is null;
+        private int? Id { get; } 
+        public bool IsNewItem => this.Id is null;
+        
+        
+        // private string? username;
+        // public string? Username
+        // {
+        //     get => this.username;
+        //     init
+        //     {
+        //         if(this.IsNewItem)
+        //         {
+        //             this.SetProperty(ref this.username, value);
+        //         } 
+        //     }
+        // }
 
-    [ObservableProperty] 
-    [NotifyDataErrorInfo] 
-    [Required(AllowEmptyStrings = false)] 
-    private string? username;
+        [ObservableProperty] 
+        [NotifyDataErrorInfo] 
+        [Required(AllowEmptyStrings = false)] 
+        private string? username;
+        
+        [ObservableProperty] 
+        [NotifyDataErrorInfo] 
+        [Required(AllowEmptyStrings = false)] 
+        private string? fullName;
 
-    [ObservableProperty] 
-    [NotifyDataErrorInfo] 
-    [Required(AllowEmptyStrings = false)] 
-    private string? fullName;
-
-    [ObservableProperty] 
-    [NotifyDataErrorInfo] 
-    [Required(AllowEmptyStrings = false)] 
-    private string? displayName;
-
+        [ObservableProperty] 
+        [NotifyDataErrorInfo] 
+        [Required(AllowEmptyStrings = false)] 
+        private string? displayName;
     
-    private async Task Save(CancellationToken cancellationToken) 
-    {
-        if(this.Id is not null)
+        [RelayCommand]
+        private async Task Save(CancellationToken cancellationToken = default) 
         {
-            var updateUser = new UserProfileUpdateRequest(FullName, DisplayName);
-            await this.client.UpdateUser(this.Id.Value,updateUser, cancellationToken);
+            if(this.Id is not null)
+            {
+                var updateUser = new UserProfileUpdateRequest(FullName, DisplayName);
+                await this.client.UpdateUser(this.Id.Value,updateUser, cancellationToken);
+            } 
+            else
+            {
+                var createUser = new UserProfileCreateRequest(Username, FullName, DisplayName);
+                await this.client.CreateUser(createUser, cancellationToken);
+            } 
         } 
-        else
-        {
-            var createUser = new UserProfileCreateRequest(Username, FullName, DisplayName);
-            await this.client.CreateUser(createUser, cancellationToken);
-        } 
-    } 
+    }
 }

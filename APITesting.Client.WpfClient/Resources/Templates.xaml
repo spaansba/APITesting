@@ -1,7 +1,4 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sidePanel="clr-namespace:APITesting.Client.WpfClient.Users.SidePanel">
-    <DataTemplate DataType="{x:Type sidePanel:EditSidePanelViewModel}">
-        <sidePanel:CreateNewSidePanel />
-    </DataTemplate>
+                    xmlns:sidePanel="clr-namespace:APITesting.Client.WpfClient.Users">
 </ResourceDictionary>

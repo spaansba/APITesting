@@ -2,23 +2,23 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace APITesting.Client.ConsoleClient;
-
-/// <summary>
-/// BackgroundService if you don't care about the result instantly and IHostedService if you need to wait on the result
-/// </summary>
-public sealed class ConsoleClientService : BackgroundService
+namespace APITesting.Client.ConsoleClient
 {
-    private readonly IServiceProvider serviceProvider;
-    private readonly IHostApplicationLifetime hostLifetime;
+    /// <summary>
+    /// BackgroundService if you don't care about the result instantly and IHostedService if you need to wait on the result
+    /// </summary>
+    public sealed class ConsoleClientService : BackgroundService
+    {
+        private readonly IServiceProvider serviceProvider;
+        private readonly IHostApplicationLifetime hostLifetime;
 
-    public ConsoleClientService(IServiceProvider serviceProvider, IHostApplicationLifetime hostLifetime)
+        public ConsoleClientService(IServiceProvider serviceProvider, IHostApplicationLifetime hostLifetime)
     {
         this.serviceProvider = serviceProvider;
         this.hostLifetime = hostLifetime;
     }
     
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var client = this.serviceProvider.GetRequiredService<ITestClient>(); // Ask for the DI'ted client
         
@@ -68,5 +68,6 @@ public sealed class ConsoleClientService : BackgroundService
             Console.WriteLine("");
         } while (!stopOperation);
 
+    }
     }
 }

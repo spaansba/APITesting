@@ -1,7 +1,6 @@
-﻿using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace APITesting.Client.WpfClient.Users.SidePanel
+namespace APITesting.Client.WpfClient.Users
 {
     public abstract class SidePanelViewModel : ObservableValidator
     {

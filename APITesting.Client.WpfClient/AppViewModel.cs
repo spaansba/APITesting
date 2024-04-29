@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using APITesting.Client.WpfClient.Drawer;
-
+using APITesting.Client.WpfClient.Common;
 
 namespace APITesting.Client.WpfClient
 {
@@ -8,10 +7,10 @@ namespace APITesting.Client.WpfClient
     {
         [ObservableProperty] 
         private object? content;
-        public DrawerHost Drawer { get; } = new DrawerHost();
+        public Drawer Drawer { get; } = new();
         public AppViewModel(ITestClient client)
         {
-            this.Content = new UserListViewModel(client);
+            this.Content = new Users.UserListViewModel(client);
         }
     }
 }

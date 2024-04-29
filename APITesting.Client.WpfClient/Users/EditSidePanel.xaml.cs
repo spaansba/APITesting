@@ -1,7 +1,6 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
-namespace APITesting.Client.WpfClient.Users.SidePanel
+namespace APITesting.Client.WpfClient.Users
 {
     public partial class EditSidePanel : UserControl
     {

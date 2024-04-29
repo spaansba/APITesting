@@ -1,11 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
-using APITesting.Client.WpfClient.Users;
+using APITesting.Client.WpfClient.Common;
 using APITesting.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
-namespace APITesting.Client.WpfClient;
+namespace APITesting.Client.WpfClient.Users;
 
 public sealed partial class UserListViewModel : ObservableObject
 {
@@ -49,9 +50,16 @@ public sealed partial class UserListViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void AddUser()
+    private async Task AddUser()
     {
-        SidePanel = new EditUserViewModel(this.client);
+        var drawerContent = new EditUserViewModel(this.client);
+
+        var drawerMessage = new OpenDrawerMessage(drawerContent);
+
+        await WeakReferenceMessenger.Default.Send(drawerMessage);
+
+        ; // <-- Set a breakpoint here. 
+
     }
 
     //MIKE: had to change to "EDIT' because the overload woudnt work in xaml

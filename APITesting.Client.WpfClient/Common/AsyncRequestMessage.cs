@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace APITesting.Client.WpfClient.Drawer;
+namespace APITesting.Client.WpfClient.Common;
 
 public class AsyncRequestMessage
 {
@@ -37,7 +37,6 @@ public class AsyncRequestMessage
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)] [EditorBrowsable(EditorBrowsableState.Never)]
-    
     public TaskAwaiter GetAwaiter()
     {
         return this.Response.GetAwaiter();

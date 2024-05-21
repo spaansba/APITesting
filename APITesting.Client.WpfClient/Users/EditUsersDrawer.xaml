@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="APITesting.Client.WpfClient.Users.EditSidePanel"
+﻿<UserControl x:Class="APITesting.Client.WpfClient.Users.EditUsersDrawer"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Height="450" Width="800"
+        Height="450" 
         xmlns:common="clr-namespace:APITesting.Client.WpfClient.Common"
         xmlns:users="clr-namespace:APITesting.Client.WpfClient.Users"
         d:DataContext="{d:DesignInstance Type=users:EditUserViewModel,
@@ -14,8 +14,6 @@
         <common:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
         <common:BoolVisibilityConverter x:Key="NegatedBoolVisibilityConverter" Negated="True" />
     </UserControl.Resources>
-    
-    
     
     <ItemsControl>
         <Grid>

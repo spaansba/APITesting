@@ -2,9 +2,9 @@
 
 namespace APITesting.Client.WpfClient.Users
 {
-    public partial class EditSidePanel : UserControl
+    public partial class EditUsersDrawer : UserControl
     {
-        public EditSidePanel()
+        public EditUsersDrawer()
         {
             InitializeComponent();
         }

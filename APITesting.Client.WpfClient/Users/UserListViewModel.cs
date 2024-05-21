@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows;
 using APITesting.Client.WpfClient.Common;
 using APITesting.Client.WpfClient.Data;
@@ -17,12 +18,13 @@ public sealed partial class UserListViewModel : ObservableObject
     {
         this.client = client;
         _ = this.PopulateUsers(); // Start a "fire and forget" task
+        
+    
     }
 
     public ObservableCollection<UserProfileResponse> Users { get; } = new();
-
-    [ObservableProperty] private object? sidePanel;
     
+    [ObservableProperty] private object? sidePanel;
 
     private async Task PopulateUsers()
     {
@@ -30,7 +32,7 @@ public sealed partial class UserListViewModel : ObservableObject
         {
             //UserListViewModel sends a requestUserMessage, then DataManager listens to that message and runs client. GetAllUsers which in turn returns a Task<IEnumerable<UserProfileResponse>>
             // which will be sent back to UserListViewModel
-            var usersToLoad = (await RequestUsersMessage.SendOrThrow());
+            var usersToLoad = await RequestUsersMessage.SendOrThrow();
             Application.Current.Dispatcher.Invoke(() =>
                 {
                     foreach (var user in usersToLoad)
@@ -60,19 +62,21 @@ public sealed partial class UserListViewModel : ObservableObject
         var drawerMessage = new OpenDrawerMessage(drawerContent);
 
         await WeakReferenceMessenger.Default.Send(drawerMessage);
-
+        await RePopulateUsers();
         ; // <-- Set a breakpoint here. 
 
     }
-
-    //MIKE: had to change to "EDIT' because the overload woudnt work in xaml
+    
     [RelayCommand]
-    private void EditUser(UserProfileResponse user)
+    private async Task EditUser(UserProfileResponse user)
     {
-        SidePanel = new EditUserViewModel(this.client, user);
+        var drawerContent = new EditUserViewModel(this.client, user);
+        var drawerMessage = new OpenDrawerMessage(drawerContent);
+        await WeakReferenceMessenger.Default.Send(drawerMessage);
+        await RePopulateUsers();
     }
 
-    //MIKe: I removed cancellation token, dont know how to implement
+    //MIKE: I removed cancellation token, dont know how to implement
     [RelayCommand]
     private async Task DeleteUser(UserProfileResponse user)
     {
@@ -80,4 +84,3 @@ public sealed partial class UserListViewModel : ObservableObject
         await RePopulateUsers();
     }
 }
-

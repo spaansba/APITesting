@@ -1,11 +1,12 @@
 ﻿namespace APITesting.Contracts
 {
     public sealed record UserProfileResponse(
-        int Id,
+        long Id,
         string Username,
         string FullName,
         string DisplayName
     );
+    
 
     public sealed record UserProfileCreateRequest(
         string Username,

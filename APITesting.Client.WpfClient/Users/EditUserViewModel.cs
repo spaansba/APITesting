@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using APITesting.Client.WpfClient.Common;
+using APITesting.Client.WpfClient.Data;
 using APITesting.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -19,28 +20,22 @@ namespace APITesting.Client.WpfClient.Users
             this.DisplayName = user?.DisplayName;
         }
         
-
         private int? Id { get; } 
         public bool IsNewItem => this.Id is null;
         
         
-        // private string? username;
-        // public string? Username
-        // {
-        //     get => this.username;
-        //     init
-        //     {
-        //         if(this.IsNewItem)
-        //         {
-        //             this.SetProperty(ref this.username, value);
-        //         } 
-        //     }
-        // }
-
-        [ObservableProperty] 
-        [NotifyDataErrorInfo] 
-        [Required(AllowEmptyStrings = false)] 
         private string? username;
+        public string? Username
+        {
+            get => this.username;
+            init
+            {
+                if(this.IsNewItem)
+                {
+                    this.SetProperty(ref this.username, value);
+                } 
+            }
+        }
         
         [ObservableProperty] 
         [NotifyDataErrorInfo] 
@@ -57,6 +52,7 @@ namespace APITesting.Client.WpfClient.Users
         {
             if(this.Id is not null)
             {
+                var usersToLoad = await RequestUsersMessage.SendOrThrow();
                 var updateUser = new UserProfileUpdateRequest(FullName, DisplayName);
                 await this.client.UpdateUser(this.Id.Value,updateUser, cancellationToken);
             } 

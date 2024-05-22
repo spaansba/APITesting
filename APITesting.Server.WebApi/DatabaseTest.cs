@@ -121,4 +121,14 @@ public class DatabaseTest : BackgroundService, IDatabase
         await using var connection = await CreateConnection();
         return await func(connection, argument);
     }
+
+    public async Task<TResult> Get<TArgument, TResult>(Func<IDbConnection, IDbTransaction, TArgument, CancellationToken, Task<TResult>> func, 
+        TArgument argument, CancellationToken cancellationToken)
+    {
+        await using var connection = await CreateConnection(cancellationToken);
+        await using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+        var result =  await func(connection, transaction, argument, cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+        return result;
+    }
 }

@@ -18,6 +18,7 @@ public interface IDatabase
         TArgument argument,
         CancellationToken cancellationToken
     );
+    // Without cancellation token
     public Task Perform(
         Func<IDbConnection, Task> func
     );
@@ -25,6 +26,8 @@ public interface IDatabase
         Func<IDbConnection, TArgument, Task> func, 
         TArgument argument
     );
+    
+    // With Transaction
     
     /// <summary>
     /// For methods that Do return a value
@@ -42,11 +45,19 @@ public interface IDatabase
         TArgument argument,
         CancellationToken cancellationToken
     );
+    // Without cancellation token
     public Task<TResult> Get<TResult>(
         Func<IDbConnection, Task<TResult>> func
     );
     public Task<TResult> Get<TArgument, TResult>(
         Func<IDbConnection, TArgument, Task<TResult>> func, 
         TArgument argument
+    );
+    
+    // With Transaction
+    public Task<TResult> Get<TArgument, TResult>(
+        Func<IDbConnection, IDbTransaction, TArgument, CancellationToken, Task<TResult>> func, 
+        TArgument argument,
+        CancellationToken cancellationToken
     );
 }

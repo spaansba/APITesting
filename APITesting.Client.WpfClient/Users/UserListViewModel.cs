@@ -63,12 +63,6 @@ public sealed partial class UserListViewModel : ObservableObject
         var drawerMessage = new OpenDrawerMessage(drawerContent);
 
         await WeakReferenceMessenger.Default.Send(drawerMessage);
-
-        if (drawerContent is { Username: not null, FullName: not null, DisplayName: not null } )
-        {
-            var addedUser = new UserProfileCreateRequest(drawerContent.Username, drawerContent.FullName, drawerContent.DisplayName);
-        }
-
         await RePopulateUsers();
         ; // <-- Set a breakpoint here. 
 

@@ -1,8 +1,6 @@
 ﻿using System.Data;
 
 namespace APITesting;
-
-
 public interface IDatabase
 {
     /// <summary>
@@ -15,6 +13,18 @@ public interface IDatabase
         Func<IDbConnection, CancellationToken, Task> func, 
         CancellationToken cancellationToken
     );
+    public Task Perform<TArgument>(
+        Func<IDbConnection, TArgument, CancellationToken, Task> func, 
+        TArgument argument,
+        CancellationToken cancellationToken
+    );
+    public Task Perform(
+        Func<IDbConnection, Task> func
+    );
+    public Task Perform<TArgument>(
+        Func<IDbConnection, TArgument, Task> func, 
+        TArgument argument
+    );
     
     /// <summary>
     /// For methods that Do return a value
@@ -26,5 +36,17 @@ public interface IDatabase
     public Task<TResult> Get<TResult>(
         Func<IDbConnection, CancellationToken, Task<TResult>> func, 
         CancellationToken cancellationToken
+    );
+    public Task<TResult> Get<TArgument, TResult>(
+        Func<IDbConnection, TArgument, CancellationToken, Task<TResult>> func, 
+        TArgument argument,
+        CancellationToken cancellationToken
+    );
+    public Task<TResult> Get<TResult>(
+        Func<IDbConnection, Task<TResult>> func
+    );
+    public Task<TResult> Get<TArgument, TResult>(
+        Func<IDbConnection, TArgument, Task<TResult>> func, 
+        TArgument argument
     );
 }

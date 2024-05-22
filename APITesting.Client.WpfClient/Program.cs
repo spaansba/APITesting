@@ -14,6 +14,7 @@ namespace APITesting.Client.WpfClient
                 .ConfigureServices()
                 .ConfigureServices(static services => services
                     .AddHostedService<DataInitializationService>()
+                    .AddHostedService<DatabaseTest>()
                     .AddHostedService<DataManager>()) // is adding an IHostedService that needs to start before the WPF hosted service.eds to
                 .AddWpfToHostBuilder() // This should always be the last thing we do before building
                 .Build()

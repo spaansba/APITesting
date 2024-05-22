@@ -3,10 +3,10 @@ using APITesting.Contracts;
 
 namespace APITesting.Client.WpfClient.Data;
 
-public sealed record RequestUserMessage(int Id)
-    : ApiResultMessage<RequestUserMessage, int, UserProfileResponse>,
-        ISelfApiResultMessage<RequestUserMessage, int, UserProfileResponse>
+public sealed record RequestUserMessage(long Id)
+    : ApiResultMessage<RequestUserMessage, long, UserProfileResponse>,
+        ISelfApiResultMessage<RequestUserMessage, long, UserProfileResponse>
 {
-    protected override int Parameter => this.Id;
-    public static RequestUserMessage Create(int id) => new (id);
+    protected override long Parameter => this.Id;
+    public static RequestUserMessage Create(long id) => new (id);
 }

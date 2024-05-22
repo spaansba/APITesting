@@ -20,7 +20,7 @@ namespace APITesting.Client.WpfClient.Users
             this.DisplayName = user?.DisplayName;
         }
         
-        private int? Id { get; } 
+        private long? Id { get; } 
         public bool IsNewItem => this.Id is null;
         
         

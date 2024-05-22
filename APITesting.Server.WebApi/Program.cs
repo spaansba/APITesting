@@ -1,3 +1,4 @@
+using APITesting.Contracts;
 using APITesting.EndPoints;
 using Serilog;
 
@@ -5,7 +6,7 @@ namespace APITesting
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             ConfigureDapper();
             var builder = WebApplication.CreateBuilder(args);
@@ -44,14 +45,18 @@ namespace APITesting
             // Resource endpoints registering
             app.AddUserEndpoints();
             app.UseHttpsRedirection();
-
             //
             // app.MapGet("options", (IOptions<ApplicationOptions> options,
             //     IOptionsSnapshot<ApplicationOptions> optionsSnapshot,
             //     IOptionsMonitor<ApplicationOptions> optionsMonitor) => 
             //     options.Value.GetResult(options, optionsSnapshot, optionsMonitor));
+            
+            await app.RunAsync();
+            
+            var UserRepository = new UserRepository();
+            var newUser = await UserRepository.AddSingleUser(new UserProfileCreateRequest("Bas", "Bassie", "Bassie111"));
+            Console.WriteLine($"Added User {newUser}");
 
-            app.Run();
         }
         
         private static void ConfigureDapper()

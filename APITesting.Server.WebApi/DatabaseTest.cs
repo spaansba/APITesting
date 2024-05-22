@@ -37,10 +37,9 @@ public class DatabaseTest : BackgroundService, IDatabase
 
     public async Task<UserProfileResponse> Create(UserProfileCreateRequest request)
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        return await this.connection.QuerySingle<UserProfileResponse>(InsertUserQuery, request);
+        await using var connection = await CreateConnection();
+        return connection.QuerySingle<UserProfileResponse>(InsertUserQuery, request);
     }
-    
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -53,11 +52,22 @@ public class DatabaseTest : BackgroundService, IDatabase
         }
     }
 
-    private static async Task<NpgsqlConnection> CreateConnection(CancellationToken cancellationToken)
+    private static async Task<NpgsqlConnection> CreateConnection(CancellationToken cancellationToken = default)
     {
-        var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(cancellationToken);
-        return connection;
+        NpgsqlConnection? connection = null;
+        try
+        {
+            connection = new NpgsqlConnection(ConnectionString);
+            await connection.OpenAsync(cancellationToken);
+            return connection;
+        }
+        catch
+        {
+            // try catch because otherwise if OpenAsync throws an exception, then the NpgsqlConnection never gets disposed.
+            if(connection is not null)
+                await connection.DisposeAsync();
+            throw;
+        }
     }
     
     public async Task Perform(Func<IDbConnection, CancellationToken, Task> func, CancellationToken cancellationToken)
@@ -65,10 +75,50 @@ public class DatabaseTest : BackgroundService, IDatabase
         await using var connection = await CreateConnection(cancellationToken);
         await func(connection, cancellationToken);
     }
+    
+    public async Task Perform<TArgument>(
+        Func<IDbConnection, TArgument, CancellationToken, Task> func,
+        TArgument argument,
+        CancellationToken cancellationToken
+    )
+    {
+        await using var connection = await CreateConnection(cancellationToken);
+        await func(connection, argument, cancellationToken);
+    }
+
+    public async Task Perform(Func<IDbConnection, Task> func)
+    {
+        await using var connection = await CreateConnection();
+        await func(connection);
+    }
+
+    public async Task Perform<TArgument>(Func<IDbConnection, TArgument, Task> func, TArgument argument)
+    {
+        await using var connection = await CreateConnection();
+        await func(connection, argument);
+    }
 
     public async Task<TResult> Get<TResult>(Func<IDbConnection, CancellationToken, Task<TResult>> func, CancellationToken cancellationToken)
     {
         await using var connection = await CreateConnection(cancellationToken);
         return await func(connection, cancellationToken);
+    }
+
+    public async Task<TResult> Get<TArgument, TResult>(Func<IDbConnection, TArgument, CancellationToken, Task<TResult>> func, TArgument argument, CancellationToken cancellationToken)
+    {
+        await using var connection = await CreateConnection(cancellationToken);
+        return await func(connection, argument, cancellationToken);
+    }
+
+    public async Task<TResult> Get<TResult>(Func<IDbConnection, Task<TResult>> func)
+    {
+        await using var connection = await CreateConnection();
+        return await func(connection);
+    }
+
+    public async Task<TResult> Get<TArgument, TResult>(Func<IDbConnection, TArgument, Task<TResult>> func, TArgument argument)
+    {
+        await using var connection = await CreateConnection();
+        return await func(connection, argument);
     }
 }

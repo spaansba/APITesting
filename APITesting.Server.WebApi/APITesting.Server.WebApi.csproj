@@ -20,4 +20,8 @@
     <ProjectReference Include="..\APITesting.Contracts\APITesting.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>

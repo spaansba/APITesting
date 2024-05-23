@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Transactions;
 using APITesting.Contracts;
 using Dapper;
 using Npgsql;
@@ -75,7 +76,15 @@ public class DatabaseTest : BackgroundService, IDatabase
         await using var connection = await CreateConnection(cancellationToken);
         await func(connection, cancellationToken);
     }
-    
+
+    public async Task Perform(Func<IDbConnection, IDbTransaction, CancellationToken, Task> func, CancellationToken cancellationToken)
+    { 
+        await using var connection = await CreateConnection(cancellationToken);
+        await using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+        await func(connection, transaction, cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+    }
+
     public async Task Perform<TArgument>(
         Func<IDbConnection, TArgument, CancellationToken, Task> func,
         TArgument argument,
@@ -86,10 +95,26 @@ public class DatabaseTest : BackgroundService, IDatabase
         await func(connection, argument, cancellationToken);
     }
 
+    public async Task Perform<TArgument>(Func<IDbConnection, IDbTransaction, TArgument, CancellationToken, Task> func, TArgument argument, CancellationToken cancellationToken)
+    {
+        await using var connection = await CreateConnection(cancellationToken);
+        await using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+        await func(connection, transaction, argument, cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+    }
+
     public async Task Perform(Func<IDbConnection, Task> func)
     {
         await using var connection = await CreateConnection();
         await func(connection);
+    }
+
+    public async Task Perform(Func<IDbConnection, IDbTransaction, Task> func)
+    {
+        await using var connection = await CreateConnection();
+        await using var transaction = await connection.BeginTransactionAsync();
+        await func(connection, transaction);
+        await transaction.CommitAsync();
     }
 
     public async Task Perform<TArgument>(Func<IDbConnection, TArgument, Task> func, TArgument argument)
@@ -98,10 +123,27 @@ public class DatabaseTest : BackgroundService, IDatabase
         await func(connection, argument);
     }
 
+    public async Task Perform<TArgument>(Func<IDbConnection, IDbTransaction, TArgument, Task> func, TArgument argument)
+    {
+        await using var connection = await CreateConnection();
+        await using var transaction = await connection.BeginTransactionAsync();
+        await func(connection, transaction, argument);
+        await transaction.CommitAsync();
+    }
+
     public async Task<TResult> Get<TResult>(Func<IDbConnection, CancellationToken, Task<TResult>> func, CancellationToken cancellationToken)
     {
         await using var connection = await CreateConnection(cancellationToken);
         return await func(connection, cancellationToken);
+    }
+
+    public async Task<TResult> Get<TResult>(Func<IDbConnection, IDbTransaction, CancellationToken, Task<TResult>> func, CancellationToken cancellationToken)
+    {
+        await using var connection = await CreateConnection(cancellationToken);
+        await using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+        var result =  await func(connection, transaction, cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+        return result;
     }
 
     public async Task<TResult> Get<TArgument, TResult>(Func<IDbConnection, TArgument, CancellationToken, Task<TResult>> func, TArgument argument, CancellationToken cancellationToken)
@@ -116,10 +158,28 @@ public class DatabaseTest : BackgroundService, IDatabase
         return await func(connection);
     }
 
+    public async Task<TResult> Get<TResult>(Func<IDbConnection, IDbTransaction, Task<TResult>> func)
+    {
+        await using var connection = await CreateConnection();
+        await using var transaction = await connection.BeginTransactionAsync();
+        var result =  await func(connection, transaction);
+        await transaction.CommitAsync();
+        return result;
+    }
+
     public async Task<TResult> Get<TArgument, TResult>(Func<IDbConnection, TArgument, Task<TResult>> func, TArgument argument)
     {
         await using var connection = await CreateConnection();
         return await func(connection, argument);
+    }
+
+    public async Task<TResult> Get<TArgument, TResult>(Func<IDbConnection, IDbTransaction, TArgument, Task<TResult>> func, TArgument argument)
+    {
+        await using var connection = await CreateConnection();
+        await using var transaction = await connection.BeginTransactionAsync();
+        var result =  await func(connection, transaction, argument);
+        await transaction.CommitAsync();
+        return result;
     }
 
     public async Task<TResult> Get<TArgument, TResult>(Func<IDbConnection, IDbTransaction, TArgument, CancellationToken, Task<TResult>> func, 

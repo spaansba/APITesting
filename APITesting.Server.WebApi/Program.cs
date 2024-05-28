@@ -1,5 +1,6 @@
 using APITesting.Contracts;
 using APITesting.EndPoints;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace APITesting
@@ -62,10 +63,25 @@ namespace APITesting
             
             await app.RunAsync();
         }
-
+ 
         private static void RunMigrations()
         {
-            throw new NotImplementedException();
+            // We create a mini version of program.cs otherwise we cant access the connectionString which is configured by 
+            // the configuration system which is only available in the middle of creating the server
+
+            var builder = Host.CreateApplicationBuilder();
+
+            builder.Services
+                .AddOptions<DatabaseOptions>()
+                .Bind(builder.Configuration.GetSection(DatabaseOptions.ConfigurationKey));
+
+            var host = builder.Build();
+            var options = host.Services.GetRequiredService<IOptions<DatabaseOptions>>().Value;
+            var connectionString = options.CreateConnectionString();
+            var success = Server.Migrations.Program.RunMigrations(connectionString, out var exception);
+
+            Console.WriteLine($"Migrations {( success? "successful" : "failed" )}");
+            Console.WriteLine(exception);
         }
 
         private static void ConfigureDapper()

@@ -11,4 +11,14 @@
       <PackageReference Include="dbup-postgresql" Version="5.0.40" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Scripts\1000 - Before-Always-Unordered\" />
+      <Folder Include="Scripts\3000 - After-Always-Unordered\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Scripts\2000 - Ordered\20240528_131000-initializeDatabase.sql" />
+      <EmbeddedResource Include="Scripts\2000 - Ordered\20240528_131000-initializeDatabase.sql" />
+    </ItemGroup>
+
 </Project>

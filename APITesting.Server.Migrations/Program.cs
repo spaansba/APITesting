@@ -15,12 +15,21 @@ public static class Program
     public static bool RunMigrations(string connectionString, out Exception? error)
     {
         EnsureDatabase.For.PostgresqlDatabase(connectionString);
-        var result = DeployChanges.To
+        var upgrader = DeployChanges.To
             .PostgresqlDatabase(connectionString)
             .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
             .LogToConsole()
-            .Build()
-            .PerformUpgrade();
+            .Build();
+        
+        // We can verify things here
+        foreach (var script in upgrader.GetScriptsToExecute()) 
+        { 
+            Console.WriteLine(script.Name);
+        }
+        error = null;
+        return false;
+        
+        var result = upgrader.PerformUpgrade();
         error = result.Error;
         return result.Successful;
     }

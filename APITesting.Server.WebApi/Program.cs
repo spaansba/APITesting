@@ -8,6 +8,12 @@ namespace APITesting
     {
         private static async Task Main(string[] args)
         {
+            if(args is ["migrate"])
+            {
+                RunMigrations();
+                return;
+            }
+            
             ConfigureDapper();
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +33,10 @@ namespace APITesting
                 .AddProblemDetails(); // create an exception handler that will generate a ProblemDetails if an exception occurs https://www.rfc-editor.org/rfc/rfc7807.html
 
             builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Key));
-            builder.Services.AddHostedService<DatabaseTest>();
+            builder.Services.AddSingleton<IDatabase, Database>();
+            builder.Services.AddOptions<DatabaseOptions>()
+                .Bind(builder.Configuration.GetSection(DatabaseOptions.ConfigurationKey))
+                .ValidateOnStart();
 
             var app = builder.Build();
 
@@ -52,13 +61,13 @@ namespace APITesting
             //     options.Value.GetResult(options, optionsSnapshot, optionsMonitor));
             
             await app.RunAsync();
-            
-            var UserRepository = new UserRepository();
-            var newUser = await UserRepository.AddSingleUser(new UserProfileCreateRequest("Bas", "Bassie", "Bassie111"));
-            Console.WriteLine($"Added User {newUser}");
-
         }
-        
+
+        private static void RunMigrations()
+        {
+            throw new NotImplementedException();
+        }
+
         private static void ConfigureDapper()
         {
             // allow names like User_Id be allowed to match properties/fields like UserId 

@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{B9D18B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{5BD3E6F9-9523-4797-9859-D5EA9E9E66CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APITesting.Server.Data", "APITesting.Server.Data\APITesting.Server.Data.csproj", "{510138FA-B11C-4D50-9250-55242DCB41D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APITesting.Server.Migrations", "APITesting.Server.Migrations\APITesting.Server.Migrations.csproj", "{510138FA-B11C-4D50-9250-55242DCB41D1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{435CE6F5-B692-4150-83DD-E29C9EBC6561}"
 EndProject

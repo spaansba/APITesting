@@ -27,7 +27,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\APITesting.Client\APITesting.Client.csproj" />
-      <ProjectReference Include="..\APITesting.Server.Data\APITesting.Server.Data.csproj" />
+      <ProjectReference Include="..\APITesting.Server.Migrations\APITesting.Server.Migrations.csproj" />
       <ProjectReference Include="..\APITesting.Server.WebApi\APITesting.Server.WebApi.csproj" />
     </ItemGroup>
 

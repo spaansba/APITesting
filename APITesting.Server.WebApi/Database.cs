@@ -2,63 +2,27 @@
 using System.Transactions;
 using APITesting.Contracts;
 using Dapper;
+using Microsoft.Extensions.Options;
 using Npgsql;
 
 namespace APITesting;
 
-public class DatabaseTest : BackgroundService, IDatabase
+public class Database : IDatabase
 {
-    
-    private const string ConnectionString = "Host=localhost;Username=postgres;Password=postgres;Database=test_database";
-    
-    // Make the query strings const, so it doesn't recreate the string each time we execute the query
-    // Make sure the string interpolation in a const are compile time constant
-    private const string GetAllUsersQuery = $"""
-                                             SELECT id AS {nameof(UserProfileResponse.Id)} ,
-                                                 username AS {nameof(UserProfileResponse.Username)},
-                                                 full_name AS {nameof(UserProfileResponse.FullName)} ,
-                                                 display_name AS {nameof(UserProfileResponse.DisplayName)}
-                                             FROM users;
-                                             """;
 
-    // For SQL queries with ANY user input use Parameters like we do below to combat sql injection attacks
-    // https://www.postgresql.org/docs/current/dml-returning.html < returning logic for postgres
-    private const string InsertUserQuery = $"""
-                                             INSERT INTO users  (username, full_name, display_name) 
-                                             VALUES(
-                                                 @{ nameof(UserProfileCreateRequest.Username) },
-                                                 @{ nameof(UserProfileCreateRequest.FullName) },
-                                                 @{ nameof(UserProfileCreateRequest.DisplayName) }
-                                             )
-                                                 RETURNING id AS {nameof(UserProfileResponse.Id)}, 
-                                                 username AS {nameof(UserProfileResponse.Username)}, 
-                                                 full_name AS {nameof(UserProfileResponse.FullName)}, 
-                                                 display_name AS {nameof(UserProfileResponse.DisplayName)}
-                                             """;
-
-    public async Task<UserProfileResponse> Create(UserProfileCreateRequest request)
+    public Database(IOptions<DatabaseOptions> options)
     {
-        await using var connection = await CreateConnection();
-        return connection.QuerySingle<UserProfileResponse>(InsertUserQuery, request);
-    }
-    
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(stoppingToken);
-        var users = await connection.QueryAsync<UserProfileResponse>(GetAllUsersQuery);
-        foreach (var user in users)
-        {
-            Console.WriteLine(user);
-        }
+        this.connectionString = options.Value.CreateConnectionString();
     }
 
-    private static async Task<NpgsqlConnection> CreateConnection(CancellationToken cancellationToken = default)
+    private readonly string connectionString;
+
+    private async Task<NpgsqlConnection> CreateConnection(CancellationToken cancellationToken = default)
     {
         NpgsqlConnection? connection = null;
         try
         {
-            connection = new NpgsqlConnection(ConnectionString);
+            connection = new NpgsqlConnection(connectionString);
             await connection.OpenAsync(cancellationToken);
             return connection;
         }
@@ -191,4 +155,8 @@ public class DatabaseTest : BackgroundService, IDatabase
         await transaction.CommitAsync(cancellationToken);
         return result;
     }
+    
+    
+    
 }
+
